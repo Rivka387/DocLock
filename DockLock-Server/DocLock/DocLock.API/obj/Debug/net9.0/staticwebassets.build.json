@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "RC3yLji5BJTHb++sHJ+TDPX2QkCQXigykCJbRAGvRPI=",
+  "Source": "DocLock.API",
+  "BasePath": "_content/DocLock.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

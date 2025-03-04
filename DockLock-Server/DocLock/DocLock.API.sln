@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocLock.API", "DockLock.API\DocLock.API.csproj", "{1C183804-0C53-441F-9A03-96E5671FC066}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocLock.Core", "DockLock.Core\DocLock.Core.csproj", "{D562F397-1133-47DC-8E72-3F6F99F7A73F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C183804-0C53-441F-9A03-96E5671FC066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C183804-0C53-441F-9A03-96E5671FC066}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C183804-0C53-441F-9A03-96E5671FC066}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C183804-0C53-441F-9A03-96E5671FC066}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D562F397-1133-47DC-8E72-3F6F99F7A73F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D562F397-1133-47DC-8E72-3F6F99F7A73F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D562F397-1133-47DC-8E72-3F6F99F7A73F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D562F397-1133-47DC-8E72-3F6F99F7A73F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
