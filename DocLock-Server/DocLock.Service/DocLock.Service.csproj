@@ -10,4 +10,8 @@
     <ProjectReference Include="..\DocLock.Core\DocLock.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\NewFolder\" />
+  </ItemGroup>
+
 </Project>

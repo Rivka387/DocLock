@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DocLock.Core.DTOS;
 
-namespace DocLock.Core.Entities
+namespace DocLock.Service.PostModels
 {
-    public class UserFile
+    public class UserFilePostModel
     {
         public int Id { get; set; }
         public string FileName { get; set; }
-        public UserDto User { get; set; }
         public int OwnerId { get; set; }
-        public string FileLink { get; set; }
-        public string EncryptedFileLink { get; set; }
         public string FilePassword { get; set; }
-        public DateOnly CreatedAt { get; set; }
-
     }
 }
