@@ -2,6 +2,7 @@
 using DocLock.Core.DTOS;
 using DocLock.Core.IServices;
 using DocLock.Service.PostModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,8 @@ namespace DocLock_Server.Controllers
         }
 
         // GET: api/<UserController>
+        [HttpGet("admin-only")]
+
         [HttpGet]
 
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
@@ -102,6 +105,8 @@ namespace DocLock_Server.Controllers
         }
 
         // DELETE api/<UserController>/5
+
+        [Authorize(Policy = "EditorOrAdmin")]
         [HttpDelete("/{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {

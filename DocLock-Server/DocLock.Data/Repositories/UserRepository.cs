@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,7 +78,6 @@ namespace DocLock.Data.Repositories
             {
                 return false;
             }
-
         }
 
         public async Task<bool> UpdateNameAsync(int id, string name)
@@ -104,7 +104,7 @@ namespace DocLock.Data.Repositories
             {
                 var user = await _dataContext._Users.FirstOrDefaultAsync(user => user.Id == id);
                 if (user == null) return false;
-                user.Role = role;
+                user.Roles.Add(role);
                 await _dataContext.SaveChangesAsync();
                 return true;
             }

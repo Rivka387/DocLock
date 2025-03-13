@@ -6,6 +6,7 @@ using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
 using DocLock.Core.IServices;
 using DocLock.Service.PostModels;
+using DocLock.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -20,7 +21,8 @@ namespace DocLock_Server.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public AuthController(IConfiguration configuration,IUserService userService,IMapper mapper)
+        private readonly IAuthService _authService;
+        public AuthController(IConfiguration configuration, IUserService userService, IMapper mapper)
         {
             _configuration = configuration;
             _userService = userService;
@@ -28,72 +30,39 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody]LoginModel loginModel)
+        public async Task<ActionResult> Login([FromBody] LoginModel loginModel)
         {
-            if (string.IsNullOrEmpty(loginModel.Email) || loginModel.Password.Length <= 0)
-            {
-                return BadRequest("Email and password are required.");
-            }
+            if (EmailValidator.IsValidEmail(loginModel.Email))
+                return BadRequest("Email not valid");
 
-            var user = await _userService.LoginAsync(loginModel.Email,loginModel.Password);
+            if (string.IsNullOrEmpty(loginModel.Password)) return BadRequest("Password are required");
 
-            if (user!=null)
-            {
-                var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, "malkabr"),
-                new Claim(ClaimTypes.Role, "teacher")
-            };
+            var res = await _userService.LoginAsync(loginModel.Email, loginModel.Password);
+            if (res == null)
+                return NotFound();
+            if(res.IsActive ==false)
+                return Unauthorized();
 
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Key")));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var tokeOptions = new JwtSecurityToken(
-                    issuer: _configuration.GetValue<string>("JWT:Issuer"),
-                    audience: _configuration.GetValue<string>("JWT:Audience"),
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(6),
-                    signingCredentials: signinCredentials
-                );
-                //Role role = Role.USER;
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new { Token = tokenString });
-            }
-            return Unauthorized();
+            var tokenString = _authService.GenerateJwtToken(res.Name, res.Roles.Select(r => r.RoleName).ToArray());
+            return Ok(new { Token = tokenString, user = res });
         }
+        
         // POST api/<UserController>
 
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] LoginModel loginModel)
         {
-            if (string.IsNullOrEmpty(loginModel.Email) || loginModel.Password.Length <= 0)
-            {
-                return BadRequest("Email and password are required.");
-            }
+            if (EmailValidator.IsValidEmail(loginModel.Email))
+                return BadRequest("Email not valid");
+            if (string.IsNullOrEmpty(loginModel.Password)) return BadRequest("Password are required");
 
-            var user = await _userService.RegisterAsync(_mapper.Map<UserDto>(loginModel));
+            var res = await _userService.RegisterAsync(_mapper.Map<UserDto>(loginModel));
+            if (res == null)
+                return BadRequest();
 
-            if (user != null)
-            {
-                var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, "malkabr"),
-                new Claim(ClaimTypes.Role, "teacher")
-            };
-
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Key")));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var tokeOptions = new JwtSecurityToken(
-                    issuer: _configuration.GetValue<string>("JWT:Issuer"),
-                    audience: _configuration.GetValue<string>("JWT:Audience"),
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(6),
-                    signingCredentials: signinCredentials
-                );
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new { Token = tokenString });
-            }
-            return Unauthorized();
+                var tokenString = _authService.GenerateJwtToken(res.Name, res.Roles.Select(r => r.RoleName).ToArray());
+                return Ok(new { Token = tokenString ,user = res});
+            
         }
     }
 }

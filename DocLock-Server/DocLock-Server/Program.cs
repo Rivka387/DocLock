@@ -43,7 +43,7 @@ builder.Services.AddScoped<IDataContext, DataContext>(); // רישום IDataContext
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer("Data Source=DESKTOP-13C4MS2;Initial Catalog=DocLock;Integrated Security=true");
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 
@@ -85,6 +85,15 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
         };
     });
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
+    options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
+});
+
 
 
 var app = builder.Build();

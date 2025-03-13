@@ -12,5 +12,7 @@ namespace DocLock.Service.PostModels
         public string FileName { get; set; }
         public int OwnerId { get; set; }
         public string FilePassword { get; set; }
+        public bool IsActive { get; set; }
+
     }
 }
