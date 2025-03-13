@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
+using DocLock.Core.IRepositories;
 using DocLock.Core.IServices;
 using DocLock.Core.Repositories;
 
@@ -15,10 +16,12 @@ namespace DocLock.Service.Services
     public class UserService : IUserService
     {
         readonly IUserRepository _userRepository;
+        readonly IRoleRepository _roleRepository;
         readonly IMapper _mapper;
-        public UserService(IMapper mapper, IUserRepository userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository,IRoleRepository roleRepository)
         {
             _mapper = mapper;
+            _roleRepository = roleRepository;
             _userRepository = userRepository;
         }
         public async Task<bool> DeleteUserAsync(int id)
@@ -50,15 +53,25 @@ namespace DocLock.Service.Services
             return _mapper.Map<UserDto>(res);
         }
 
-        public async Task<UserDto> RegisterAsync(UserDto user)
+        public async Task<UserDto> RegisterAsync(UserDto user, string[] roles)
         {
-            var res = await _userRepository.AddUserAsync(_mapper.Map<User>(user));
+            var userEmail = await this.GetUserByEmailAsync(user.Email);
+            if (userEmail != null)
+            {
+                return null;
+            }
+            var res = await _userRepository.AddUserAsync(_mapper.Map<User>(user), roles);
+            if (res != null)
+            {
+                for (int i = 0; i < roles.Length; i++)
+                {
+                    await _userRepository.UpdateRoleAsync(res.Id, await _roleRepository.GetRoleByNameAsync(roles[i]));
+                }
+            }
             return _mapper.Map<UserDto>(res);
-
-
         }
 
-      
+
 
         public async Task<bool> UpdateNameAsync(int id, string email)
         {

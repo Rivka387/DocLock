@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocLock.Core.Entities;
+using DocLock.Core.IServices;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +10,29 @@ namespace DocLock_Server.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
+        readonly IRoleService _roleService;
+        public RoleController(IRoleService roleService)
+        {
+            _roleService = roleService;
+        }
+
         // GET: api/<RoleController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("{roleName}")]
+        public async Task<ActionResult> GetRoleByNameAsync(string roleName)
         {
-            return new string[] { "value1", "value2" };
+            return Ok(await _roleService.GetRoleByNameAsync(roleName));
         }
 
-        // GET api/<RoleController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{roleName}/permissin")]
+        public async Task<ActionResult> GetRoleHasPermissinAsync(string roleName, [FromQuery] string permission)
         {
-            return "value";
+            return Ok(await _roleService.IsRoleHasPermissinAsync(roleName, permission));
         }
 
-        // POST api/<RoleController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{roleName}")]
+        public async Task<ActionResult> AddPermissinForRoleAsync(string roleName, [FromBody] Permission permission)
         {
-        }
-
-        // PUT api/<RoleController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<RoleController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(await _roleService.AddPermissinForRoleAsync(roleName, permission));
         }
     }
 }

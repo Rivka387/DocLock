@@ -40,29 +40,32 @@ namespace DocLock_Server.Controllers
             var res = await _userService.LoginAsync(loginModel.Email, loginModel.Password);
             if (res == null)
                 return NotFound();
-            if(res.IsActive ==false)
+            if (res.IsActive == false)
                 return Unauthorized();
 
             var tokenString = _authService.GenerateJwtToken(res.Name, res.Roles.Select(r => r.RoleName).ToArray());
             return Ok(new { Token = tokenString, user = res });
         }
-        
+
         // POST api/<UserController>
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] LoginModel loginModel)
+        public async Task<ActionResult> Register([FromBody] RegisterPostModel userRegister)
         {
-            if (EmailValidator.IsValidEmail(loginModel.Email))
-                return BadRequest("Email not valid");
-            if (string.IsNullOrEmpty(loginModel.Password)) return BadRequest("Password are required");
+            if (!EmailValidator.IsValidEmail(userRegister.User.Email))
+            {
+                return BadRequest("Email Not valid");
 
-            var res = await _userService.RegisterAsync(_mapper.Map<UserDto>(loginModel));
+            }
+
+            var res = await _userService.RegisterAsync(_mapper.Map<UserDto>(userRegister.User), userRegister.Roles);
             if (res == null)
+            {
                 return BadRequest();
+            }
 
-                var tokenString = _authService.GenerateJwtToken(res.Name, res.Roles.Select(r => r.RoleName).ToArray());
-                return Ok(new { Token = tokenString ,user = res});
-            
+            var tokenString = _authService.GenerateJwtToken(res.Name, userRegister.Roles);
+            return Ok(new { Token = tokenString, user = res });
         }
     }
 }
