@@ -10,8 +10,9 @@ namespace DocLock.Data
 {
     public interface IDataContext
     {
-        public Task<int> SaveChangesAsync();
         public DbSet<User> _Users { get; set; }
         public DbSet<UserFile> _Files { get; set; }
+        Task<int> SaveChangesAsync();
+
     }
 }

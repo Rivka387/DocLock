@@ -19,7 +19,7 @@ namespace DocLock.Core
     {
         public ProfileMapping()
         {
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<UserDto, User>().ReverseMap();
             CreateMap<UserFile, UserFileDto>().ReverseMap();
         }
     }
