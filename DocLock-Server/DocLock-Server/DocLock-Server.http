@@ -1,4 +1,4 @@
-@DocLock_Server_HostAddress = http://localhost:5141
+@DocLock_Server_HostAddress = http://localhost:3000
 
 GET {{DocLock_Server_HostAddress}}/weatherforecast/
 Accept: application/json

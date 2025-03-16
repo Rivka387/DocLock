@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DocLock.Core.DTOS;
+using DocLock.Service;
 
 
 
@@ -24,9 +25,11 @@ var builder = WebApplication.CreateBuilder(args);
 //Service
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IFileService, UserFileService>();
+builder.Services.AddScoped<IUserFileService, UserFileService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
 
 //Repository
 
@@ -34,13 +37,8 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserFileRepository, UserFileRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 
-
-//Repository
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserFileRepository, UserFileRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 //Data
 builder.Services.AddScoped<IDataContext, DataContext>(); // רישום IDataContext

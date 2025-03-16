@@ -8,7 +8,8 @@ namespace DocLock.Service.PostModels
 {
     public class LoginModel
     {
-        public string Email;
-        public string Password;
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string[] Roles { get; set;}
     }
 }

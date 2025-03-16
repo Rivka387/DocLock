@@ -21,6 +21,10 @@ namespace DocLock.Core
         {
             CreateMap<UserDto, User>().ReverseMap();
             CreateMap<UserFile, UserFileDto>().ReverseMap();
+            CreateMap<Permission, PermissionDto>().ReverseMap();
+            CreateMap<Role, RoleDto>().ReverseMap();    
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto,User> ();
         }
     }
 }
