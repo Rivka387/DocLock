@@ -17,7 +17,8 @@ namespace DocLock.Core.IServices
 
 
         //PUT
-        public Task<UserDto> RegisterAsync(UserDto user, string[] roles);
+        public Task<UserDto> RegisterAsync(UserDto user);
+
         //POST
         public Task<UserDto> LoginAsync(string email, string password);
         public Task<bool> UpdatePasswordAsync(int id,string email);

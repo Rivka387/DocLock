@@ -17,7 +17,8 @@ namespace DocLock.Core.Repositories
 
 
         //Put
-        public Task<User> AddUserAsync(User user, string[] roles);
+        public Task<User> AddUserAsync(User user);
+
 
         //Post
         public Task<User> LoginAsync(string email, string password);

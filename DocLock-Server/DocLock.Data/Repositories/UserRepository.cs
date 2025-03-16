@@ -40,7 +40,7 @@ namespace DocLock.Data.Repositories
         }
 
 
-        public async Task<User> AddUserAsync(User user, string[] roles)
+        public async Task<User> AddUserAsync(User user)
         {
             {
                 try
