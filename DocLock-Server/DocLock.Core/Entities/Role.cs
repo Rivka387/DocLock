@@ -22,12 +22,12 @@ namespace DocLock.Core.Entities
         public string Description { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateOnly CreatedAt { get; set; }= DateOnly.FromDateTime(DateTime.Now);
 
-        public DateTime UpdatedAt { get; set; }
+        public DateOnly UpdatedAt { get; set; }
 
-        public ICollection<User>? Users { get; set; }
-        public ICollection<Permission>? Permissions { get; set; }
+        public ICollection<User>? Users { get; set; } = new List<User>();
+        public ICollection<Permission>? Permissions { get; set; }= new List<Permission>();
 
     }
 

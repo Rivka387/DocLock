@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocLock.Core.IServices
+namespace DocLock.Core.DTOS
 {
-    public interface IFileService
+    internal class FileDto
     {
     }
 }

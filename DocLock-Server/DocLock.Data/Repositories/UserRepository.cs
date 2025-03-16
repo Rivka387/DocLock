@@ -125,7 +125,7 @@ namespace DocLock.Data.Repositories
                 _dataContext._Users.Remove(res);
                 await _dataContext.SaveChangesAsync();
                 return true;
-                ;
+                
             }
             catch (Exception)
             {

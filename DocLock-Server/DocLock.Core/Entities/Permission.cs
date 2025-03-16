@@ -20,7 +20,7 @@ namespace DocLock.Core.Entities
 
             public string Description { get; set; }
 
-            public ICollection<Role>? Roles { get; set; }
+            public ICollection<Role>? Roles { get; set; } = new List<Role>();
         }
     
 }

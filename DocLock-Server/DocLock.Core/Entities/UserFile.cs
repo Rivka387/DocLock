@@ -26,7 +26,7 @@ namespace DocLock.Core.Entities
         [Required]
         public string EncryptedFileLink { get; set; }
         [Required]
-        public string FilePassword { get ; set; }
+        public string FilePassword { get ; set; } // 🛑 כדאי להצפין!
         public DateOnly CreatedAt { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public bool IsActive { get; set; } = true;
 
