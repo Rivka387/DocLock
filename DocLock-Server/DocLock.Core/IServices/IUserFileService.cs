@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DocLock.Core.IServices
 {
@@ -19,11 +21,11 @@ namespace DocLock.Core.IServices
 
 
         // PUT
-        public Task<UserFileDto> UploadFileAsync(UserFileDto fileDto);
+        public Task<string> UploadFileAsync(IFormFile file, string fileName, string password, int userId, string type);
 
         // POST
         public Task<bool> UpdateFileNameAsync(int fileId, string newFileName);
-        public Task<UserDto> AddUserFileAsync(UserDto userDto);
+        public Task<FileContentResult> GetDecryptFileAsync(string encryptedLink, string password);
 
         // DELETE
         public Task<bool> DeleteUserFileAsync(int id);

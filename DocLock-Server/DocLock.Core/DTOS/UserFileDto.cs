@@ -15,5 +15,6 @@ namespace DocLock.Core.DTOS
         public string EncryptedFileLink { get; set; }
         public string FilePassword { get; set; }
         public DateOnly CreatedAt { get; set; }
+        public string FileType { get; set; }
     }
 }

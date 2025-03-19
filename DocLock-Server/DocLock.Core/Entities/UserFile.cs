@@ -17,19 +17,28 @@ namespace DocLock.Core.Entities
         [Required]
         [MaxLength(30)]
         public string FileName { get; set; }
+
         [Required]
         public int OwnerId { get; set; }
+
         [ForeignKey("OwnerId")]
         public User User { get; set; }
+
         [Required]
         public string FileLink { get; set; }
+
         [Required]
         public string EncryptedFileLink { get; set; }
+
         [Required]
         public string FilePassword { get ; set; } // 🛑 כדאי להצפין!
         public DateOnly CreatedAt { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
         public bool IsActive { get; set; } = true;
+        [Required]
+        public string FileType { get; set; }
 
-
+        //emails alloew to see th file
+        public ICollection<string> EmailAloowed { get; set; } = new List<string>();
     }
 }

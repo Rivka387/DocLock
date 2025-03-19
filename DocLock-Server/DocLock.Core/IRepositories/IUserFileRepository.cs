@@ -10,21 +10,23 @@ using DocLock.Core.Entities;
 namespace DocLock.Core.IRepositories
 {
     public interface IUserFileRepository
-    {
-        //GET
-        Task<List<UserFile>> GetAllFilesAsync();
-        Task<UserFile> GetFileByIdAsync(int id);
-        Task<UserFile> GetFileByNameAsync(string name);
-        Task<UserFile[]> GetUserFilesByUserIdAsync(int userId);
-        public Task<bool> IsFileNameExists(int userId, string fileName);
+    {//GET
+        public Task<List<UserFile>> GetAllFilesAsync();
+        public Task<UserFile> GetFileByIdAsync(int id);
+        public Task<UserFile> GetFileByNameAsync(string name);
+        public Task<UserFile[]> GetUserFilesByUserIdAsync(int userId);
+        public Task<bool> IsFileNameExistsAsync(int ownerId, string fileName);
+        public Task<UserFile> GetFileByUrlAsync(string fileUrl);
+
+        //POST
+        public Task<UserFile> AddFileAsync(UserFile file);
 
         //PUT
-        Task<UserFile> AddUserFileAsync(UserFile file);
-        Task<bool> updateFileNameAsync(UserFile userFile);
+        public Task<bool> UpdateFileNameAsync(UserFile userFile);
 
 
         //DELETE
-        Task<bool> DeleteFileAsync(int id);
+        public Task<bool> DeleteFileAsync(int id);
 
     }
 }

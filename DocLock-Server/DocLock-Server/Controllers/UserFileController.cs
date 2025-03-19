@@ -15,14 +15,20 @@ namespace DocLock_Server.Controllers
     [ApiController]
     public class UserFileController : ControllerBase
     {
-        readonly IUserFileService _userFileService;
+        private readonly IUserFileService _userFileService;
         readonly IMapper _mapper;
-        public UserFileController(IUserFileRepository userFileRepository,IUserFileService userFileService, IMapper mapper)
+        public UserFileController(IUserFileRepository userFileRepository, IUserFileService userFileService, IMapper mapper)
         {
             _userFileService = userFileService;
             _mapper = mapper;
 
         }
+
+
+
+
+
+
         // GET: api/<FileController>
         [HttpGet]
         public async Task<IActionResult> GetAllUserFiles()
@@ -32,7 +38,7 @@ namespace DocLock_Server.Controllers
         }
 
         // GET api/<FileController>/5
-        [HttpGet("user/{userId}")]
+        [HttpGet("user/{id}")]
         public async Task<ActionResult<UserFileDto[]>> GetUserFilesByUserId(int id)
         {
 
@@ -56,25 +62,26 @@ namespace DocLock_Server.Controllers
 
             return Ok(file);
         }
-        [HttpGet("Isfile/{id}")]
-        public async Task<IActionResult> IsFileExist(int ownerdId,string fileName)
-        {
-            var file = await _userFileService.IsFileNameExists(ownerdId,fileName);
-            if (file == null)
-                return NotFound("File not found.");
-            return Ok(file);
-        }
-        // POST api/<FileController>
-        [HttpPost]
-        public async Task<IActionResult> UploadFile([FromBody] UserFile file)
-        {
-            //!!!!
-            //var result = await _userFileService.AddUserFileAsync(fileDto);
-            //if (result == null)
-            //    return BadRequest("Failed to add file.");
 
-            //return Ok(result);
-            throw new System.NotImplementedException();
+        [HttpPost("IsFile/{id}")]
+        public async Task<ActionResult> IsFileExist(int id, [FromBody] string name)
+        {
+            var result = await _userFileService.IsFileNameExists(id, name);
+            return Ok(result);
+        }
+
+        // POST api/<FileController>
+
+        [HttpPost("upload/{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadFile(int id, [FromForm] UploadFileRequestDto request)
+        {
+            if (request.File == null || request.File.Length == 0)
+                return BadRequest("File is required.");
+
+            var userId = id; // לממש בהתאם
+            var result = await _userFileService.UploadFileAsync(request.File, request.FileName, request.Password, userId, request.FileType);
+            return Ok(new { encryptedLink = result });
         }
 
         // PUT api/<FileController>/5
@@ -99,4 +106,5 @@ namespace DocLock_Server.Controllers
             return Ok(result);
         }
     }
+
 }

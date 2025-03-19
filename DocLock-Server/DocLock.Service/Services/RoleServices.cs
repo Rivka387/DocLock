@@ -47,7 +47,7 @@ namespace DocLock.Service.Services
                 var res = await _permissionRepository.GetPermissionByNameAsync(permission);
                 if (res == null)
                 {
-                    throw new Exception(" permission not found");
+                    throw new Exception("permission not found");
                 }
                 return await _roleRepository.AddPermissinForRoleAsync(roleName, res);
             }

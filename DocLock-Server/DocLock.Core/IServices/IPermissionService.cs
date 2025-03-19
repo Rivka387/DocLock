@@ -15,7 +15,6 @@ namespace DocLock.Core.IServices
         public Task<List<PermissionDto>> GetPermissionsAsync();
         public Task<PermissionDto> GetPermissionByIdAsync(int id);
         public Task<PermissionDto> GetPermissionByNameAsync(string name);
-
         public Task<bool> RemovePermissionAsync(int id);
         public Task<PermissionDto> UpdatePermissionAsync(int id, PermissionDto permission);
     }

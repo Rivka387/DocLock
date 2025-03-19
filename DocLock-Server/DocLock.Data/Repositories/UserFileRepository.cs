@@ -12,13 +12,76 @@ namespace DocLock.Data.Repositories
 {
     public class UserFileRepository : IUserFileRepository
     {
-        readonly IDataContext _dataContext;
-        public UserFileRepository(IDataContext dataContext)
+        private readonly IDataContext _dataContext;
+
+        public UserFileRepository(IDataContext context)
         {
-            _dataContext = dataContext;
+            _dataContext = context;
         }
 
-        public async Task<UserFile> AddUserFileAsync(UserFile file)
+
+        //GET
+
+        public async Task<List<UserFile>> GetAllFilesAsync()
+        {
+            return await _dataContext._Files.ToListAsync();
+
+        }
+
+
+        public async Task<UserFile> GetFileByIdAsync(int id)
+        {
+            return await _dataContext._Files.FirstOrDefaultAsync(file => file.Id == id);
+        }
+
+
+        public async Task<UserFile> GetFileByNameAsync(string name)
+        {
+            return await _dataContext._Files.FirstOrDefaultAsync(file => file.FileName == name);
+        }
+
+
+        public async Task<UserFile[]> GetUserFilesByUserIdAsync(int userId)
+        {
+            var userFiles = await _dataContext._Files.Where(file => file.OwnerId == userId).ToArrayAsync();
+            return userFiles;
+        }
+
+        public async Task<UserFile> GetFileByUrlAsync(string fileUrl)
+        {
+            return await _dataContext._Files.FirstOrDefaultAsync(file => file.FileLink == fileUrl);
+        }
+
+
+        public async Task<bool> IsFileNameExistsAsync(int ownerId, string fileName)
+        {
+            var res = await _dataContext._Files.Where(f => f.OwnerId == ownerId && f.FileName == fileName).FirstOrDefaultAsync();
+            return res != null;
+        }
+
+        //PUT
+        public async Task<bool> UpdateFileNameAsync(UserFile userFile)
+        {
+
+            var userFileToUpdate = await _dataContext._Files.FirstOrDefaultAsync(file => file.Id == userFile.Id);
+            if (userFileToUpdate == null) return false;
+            userFileToUpdate.FileName = userFile.FileName;
+            try
+            {
+                await _dataContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+
+
+        //POST
+        public async Task<UserFile> AddFileAsync(UserFile file)
         {
             try
             {
@@ -32,6 +95,7 @@ namespace DocLock.Data.Repositories
             }
         }
 
+        //DELETE
         public async Task<bool> DeleteFileAsync(int id)
         {
             try
@@ -50,51 +114,6 @@ namespace DocLock.Data.Repositories
             }
         }
 
-        public async Task<List<UserFile>> GetAllFilesAsync()
-        {
-            return await _dataContext._Files.ToListAsync();
-
-        }
-
-        public async Task<UserFile> GetFileByIdAsync(int id)
-        {
-            return await _dataContext._Files.FirstOrDefaultAsync(file => file.Id == id);
-        }
-
-        public async Task<UserFile> GetFileByNameAsync(string name)
-        {
-            return await _dataContext._Files.FirstOrDefaultAsync(file => file.FileName == name);
-        }
-
-        public async Task<UserFile[]> GetUserFilesByUserIdAsync(int userId)
-        {
-            var userFiles = await _dataContext._Files.Where(file => file.OwnerId == userId).ToArrayAsync();
-            return userFiles;
-        }
-
-        public async Task<bool> IsFileNameExists(int ownerId, string fileName)
-        {
-            return await _dataContext._Files.AnyAsync(file => file.OwnerId == ownerId && file.FileName == fileName);
-        }
-
-        public async Task<bool> updateFileNameAsync(UserFile userFile)
-        {
-
-            var userFileToUpdate = await _dataContext._Files.FirstOrDefaultAsync(file => file.Id == userFile.Id);
-            if (userFileToUpdate == null) return false;
-            if (userFileToUpdate.FileName == userFile.FileName) return true;
-            userFileToUpdate.FileName = userFile.FileName;
-            try
-            {
-                await _dataContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-        }
 
     }
 }

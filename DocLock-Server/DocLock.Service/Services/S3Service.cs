@@ -5,59 +5,103 @@ using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3.Model;
 using Amazon.S3;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace DocLock.Service.Services
 {
     public class S3Service
-    {
-        //private readonly IAmazonS3 _s3Client;
-        //private readonly string _bucketName = "your-bucket-name"; // שנה לשם ה-Bucket שלך
+    {  
+        private readonly IAmazonS3 _s3Client;
+        private readonly string _encryptionKey;
+        private readonly string _bucketName;
+        private readonly IConfiguration _configuration;
 
-        //public S3Service()
-        //{
-        //    var awsAccessKey = "your-access-key"; // זמני! נכניס לקובץ הגדרות מאובטח
-        //    var awsSecretKey = "your-secret-key";
-        //    var region = RegionEndpoint.USEast1; // שנה לאזור שבחרת
+        public S3Service(IConfiguration configuration)
+        {
+            _s3Client = new AmazonS3Client(
+             configuration["AWS_ACCESS_KEY_ID"],
+             configuration["AWS_SECRET_ACCESS_KEY"],
+             Amazon.RegionEndpoint.GetBySystemName(configuration["AWS_REGION"]));
+            _encryptionKey = configuration["ENCRYPTION_KEY"];
+            _bucketName = configuration["AWS_BUCKET_NAME"];
+        }
+        public async Task<string> UploadFileAsync(IFormFile file, string fileName, byte[] encryptedData)
+        {
+            try
+            {
+                // העלאה ל-S3
+                var uploadRequest = new Amazon.S3.Model.PutObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = fileName,
+                    InputStream = new MemoryStream(encryptedData),
+                    ContentType = file.ContentType
+                };
+                await _s3Client.PutObjectAsync(uploadRequest);
 
-        //    _s3Client = new AmazonS3Client(awsAccessKey, awsSecretKey, region);
-        //}
+                return $"https://{_bucketName}.s3.amazonaws.com/{fileName}";
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<bool> DeleteFileAsync(string fileKey)
+        {
+            try
+            {
+                var deleteRequest = new Amazon.S3.Model.DeleteObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = fileKey
+                };
+                await _s3Client.DeleteObjectAsync(deleteRequest);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
-        //public async Task<string> UploadFileAsync(string fileName, Stream fileStream)
-        //{
-        //    var request = new PutObjectRequest
-        //    {
-        //        BucketName = _bucketName,
-        //        Key = fileName,
-        //        InputStream = fileStream,
-        //        ContentType = "application/octet-stream",
-        //        CannedACL = S3CannedACL.Private // קובץ יוגן افת
-        //    };
+        public async Task<string> UpdateFileNameAsync(string oldFilePath, string newFilePath)
+        {
+            try
+            {
+                var copyRequest = new Amazon.S3.Model.CopyObjectRequest
+                {
+                    SourceBucket = _bucketName,
+                    SourceKey = oldFilePath,
+                    DestinationBucket = _bucketName,
+                    DestinationKey = newFilePath
+                };
+                await _s3Client.CopyObjectAsync(copyRequest);
 
-        //    await _s3Client.PutObjectAsync(request);
-        //    return $"https://{_bucketName}.s3.amazonaws.com/{fileName}";
-        //}
+                var deleteRequest = new Amazon.S3.Model.DeleteObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = oldFilePath
+                };
+                await _s3Client.DeleteObjectAsync(deleteRequest);
+                return $"https://{_bucketName}.s3.amazonaws.com/{newFilePath}";
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
-        //public async Task<Stream> DownloadFileAsync(string fileName)
-        //{
-        //    var request = new GetObjectRequest
-        //    {
-        //        BucketName = _bucketName,
-        //        Key = fileName
-        //    };
+        public async Task<byte[]> DownloadFileAsync(string fileLink)
+        {
+            var fileKey = fileLink.Split(new[] { ".s3.amazonaws.com/" }, StringSplitOptions.None).Last();
+            var response = await _s3Client.GetObjectAsync(_bucketName, fileKey);
+            using (var memoryStream = new MemoryStream())
+            {
+                await response.ResponseStream.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
 
-        //    var response = await _s3Client.GetObjectAsync(request);
-        //    return response.ResponseStream;
-        //}
-
-        //public async Task DeleteFileAsync(string fileName)
-        //{
-        //    var request = new DeleteObjectRequest
-        //    {
-        //        BucketName = _bucketName,
-        //        Key = fileName
-        //    };
-
-        //    await _s3Client.DeleteObjectAsync(request);
-        //}
     }
 }
