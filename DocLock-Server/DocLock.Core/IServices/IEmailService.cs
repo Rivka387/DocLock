@@ -9,6 +9,6 @@ namespace DocLock.Core.IServices
 {
     public interface IEmailService
     {
-        public Task SendEmailAsync(EmailRequest request);
+        public Task<bool> SendEmailAsync(EmailRequest request);
     }
 }

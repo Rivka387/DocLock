@@ -1,5 +1,4 @@
 
-using System.Text.Json.Serialization;
 using DocLock.Core;
 using DocLock.Core.IServices;
 using DocLock.Service.Services;
@@ -14,11 +13,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DocLock.Core.DTOS;
 using DocLock.Service;
+using DotNetEnv;
+using System.Text.Json.Serialization;
 
 
 
 
 
+Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
