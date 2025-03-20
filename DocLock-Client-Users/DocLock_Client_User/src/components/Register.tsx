@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Button, TextField, Grid2 as Grid, Box, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { AppDispatch } from './Store';
-import { registerUser } from './userSlice';
 import { User } from '../types/User';
 import { Roles } from '../types/Roles';
 import { observer } from 'mobx-react-lite';
 import userStore from './userStore';
+import { Link, useNavigate } from 'react-router';
 const Register = observer((() => {
-    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate(); 
+
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
@@ -25,7 +24,12 @@ const Register = observer((() => {
     const sendVerificationCode = (email: string) => {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         setVerificationCode(code);
-        // Simulate sending email
+        const subject=`Verify your email for KLIX-Link ${code}`
+        const body=`Hello, ${nameRef.current?.value}. Your verification code for KLIX-Link is ${code}.\n Please use it to complete your registration process.`
+        userStore.sendEmail(email, subject, body);
+        console.log(`Verification code sent to ${email}: ${code}`);
+        setIsDialogOpen(true);
+        userStore.sendEmail(email, subject, body);
         console.log(`Verification code sent to ${email}: ${code}`);
         setIsDialogOpen(true);
     };
@@ -79,6 +83,7 @@ const Register = observer((() => {
             try {
                 // await dispatch(registerUser(newUser)).unwrap();
                 await userStore.registerUser(newUser,[Roles.User]);
+                navigate('/');
                 setAlertInfo({ severity: 'success', message: 'Successfully registered!' });
                 setIsDialogOpen(false);
             } catch (error) {
@@ -113,6 +118,8 @@ const Register = observer((() => {
                             Register
                         </Button>
                     </Grid>
+                    <Button type="button" component={Link} to='/login'> Have an account? Sign up</Button>
+
                 </Grid>
             </form>
             <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>

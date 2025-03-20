@@ -7,13 +7,34 @@ const url = "http://localhost:3000/api";
 
 class UserStore {
     user = {} as User;
-    token:string|null = null;
+    token:string|null = sessionStorage.getItem('token');
     loading:boolean = false;
     error:string | null = null;
 
     constructor() {
         makeAutoObservable(this);
+        
     }
+
+    setSessionStorage(token: string | null) {
+        this.token = token;
+        if (token) {
+            sessionStorage.setItem("token", token); // שמירה לאחר התחברות
+            sessionStorage.setItem('userId',this.user.id.toString()); 
+            sessionStorage.setItem("loginTime", Date.now().toString());
+            this.fetchUser(parseInt(sessionStorage.getItem('userId') as string));
+        } else {
+          sessionStorage.removeItem("token"); // ניקוי לאחר יציאה
+          sessionStorage.removeItem('userId'); 
+          sessionStorage.removeItem("loginTime");
+        }
+      }
+    
+
+      logout() {
+        this.setSessionStorage(null);
+      }
+
 
     async fetchUser(userId:number){
         this.loading = true;
@@ -32,6 +53,7 @@ class UserStore {
         }
     }
 
+
     async registerUser(user:Partial<User>,roles:Roles[]) {
         this.loading = true;
         this.error = null;
@@ -44,7 +66,12 @@ class UserStore {
                 this.user = response.data.user;
                 this.token = response.data.token;
                 console.log(this.user,this.token);
-                
+                if(this.token){
+                    sessionStorage.setItem('token', this.token);
+                    sessionStorage.setItem('userId',this.user.id.toString()); 
+                    sessionStorage.setItem("loginTime", Date.now().toString());
+                }
+
                 this.loading = false;
             });
         } catch (error:any) {
@@ -54,6 +81,7 @@ class UserStore {
             });
         }
     }
+
 
     async deleteUser(userId:number) {
         this.loading = true;
@@ -73,6 +101,7 @@ class UserStore {
         }
     }
 
+
     async loginUser(email: string, password: string,roles:Roles[]) {
         this.loading = true;
         this.error = null;
@@ -85,6 +114,11 @@ class UserStore {
                 this.token = response.data.token;
                 this.loading = false;
                 console.log(response.data.user,response.data.token);
+                if(this.token){
+                    sessionStorage.setItem('token', this.token);
+                    sessionStorage.setItem('userId',this.user.id.toString()); 
+                    sessionStorage.setItem("loginTime", Date.now().toString());
+                }
             });
         } catch (error : any) {
             runInAction(() => {
@@ -93,6 +127,7 @@ class UserStore {
             });
         }
     }
+
 
     async getUserByEmail(email:string) {
         this.loading = true;
@@ -143,6 +178,26 @@ class UserStore {
         } catch (error:any) {
             runInAction(() => {
                 this.error = error.message || "Failed to update password";
+                this.loading = false;
+            });
+        }
+    }
+
+    async sendEmail(to:string, subject:string,body:string){
+        this.loading = true;
+        this.error = null;
+        try {
+            console.log(to,subject,body);
+            
+             await axios.post(`${url}/Email/send`, { to, subject, body }, {
+                headers: { "Content-Type": "application/json" }
+            });
+            runInAction(() => {
+                this.loading = false;
+            });
+        } catch (error:any) {
+            runInAction(() => {
+                this.error = error.message || "Failed to send email";
                 this.loading = false;
             });
         }

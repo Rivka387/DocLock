@@ -113,6 +113,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+builder.WebHost.UseUrls("http://localhost:3000");
 
 var app = builder.Build();
 

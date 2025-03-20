@@ -1,30 +1,62 @@
-import { createBrowserRouter } from 'react-router'
-import Login from './components/Login'
-import Register from './components/Register'
+import { createBrowserRouter } from 'react-router';
+import Login from './components/login';
+import Register from './components/register';
+import UploadFile from './components/UploadFile';
+import FileList from './components/FileList';
+import AppLayout from './components/AppLayout';
+import ViewFile from './components/ViewFile';
+import { JSX, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import userStore from './components/userStore';
+
+
+const TOKEN_EXPIRATION_TIME = 1000* 60 * 60 * 2; 
+
+const isAuthenticated = (): boolean => {
+  const token = userStore.token;
+  const loginTime = sessionStorage.getItem("loginTime");
+console.log('isAuthenticated', token, loginTime);
+
+  if (!token || !loginTime) return false;
+
+  const elapsedTime = Date.now() - parseInt(loginTime, 10);
+  if (elapsedTime > TOKEN_EXPIRATION_TIME) {
+    userStore.logout();
+    console.log('Token expired');
+    
+    return false;
+  }
+
+  return true;
+};
+
+
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  return children;
+};
 
 export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Login/>,
-    },
-            {path: 'login', element: <Login/>},
-            {path: 'register', element: <Register/>}
-        
-        // children: [
-        //   { path: '', element: <Home/> },
-        //     { path: 'home', element: <Home/> },
-        //     { 
-        //         path: 'ShowRecipe', 
-        //         element: <ShowRecipe/>,
-        //         children: [
-        //             { path: '', element: <NoRecipe/> },
-        //             { path: 'recipes/:id', element: <RecipeInstruction/> },
-        //             { path: 'Add/:id', element: <AddRecipe/> },
-        //             { path: 'successedAdding', element: <SuccessedAdding/> },
-        //             { path: 'deleteS', element: <DeleteS/> }
-        //         ]
-        //     },
-        //     { path: 'about', element: <About/> }
-        // ]
-    
-])
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      
+      { path: 'upload', element: <ProtectedRoute><UploadFile /></ProtectedRoute>},
+      { path: 'filelist', element: <ProtectedRoute><FileList /></ProtectedRoute> },
+      { path: 'view-file', element: <ProtectedRoute><ViewFile /></ProtectedRoute> },
+      { path: 'login', element: <Login /> },
+      { path: 'register', element: <Register /> }
+    ],
+  },
+]);

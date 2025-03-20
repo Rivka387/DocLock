@@ -1,16 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Button, TextField, Grid2 as Grid, Box, Alert,  } from '@mui/material';
-import { AppDispatch } from './Store';
-import { loginUser } from './userSlice';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import userStore from './userStore';
 import { Roles } from '../types/Roles';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
 const Login = observer(() => {
-    const dispatch = useDispatch<AppDispatch>();
+
+    const navigate = useNavigate();
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const [alertInfo, setAlertInfo] = useState<{ severity: 'success' | 'error' | 'warning' | 'info', message: string } | null>(null);
@@ -46,7 +43,9 @@ const Login = observer(() => {
             try {
                 // await dispatch(loginUser({ email, password })).unwrap();
                 userStore.loginUser(email, password, [Roles.User]).then(() => {
+                    
                 console.log(userStore.user.id, userStore.token);
+                navigate('/');
                 });
                 
                 setAlertInfo({ severity: 'success', message: 'Successfully logged in!' });
@@ -81,7 +80,7 @@ const Login = observer(() => {
                     </Grid>
                 </Grid>
             </form>
-            <Button type="button" component={Link} to='/register'>Sign up</Button>
+            <Button type="button" component={Link} to='/register'> don't have an account? Sign up</Button>
         </Box>
     );
 });

@@ -49,9 +49,13 @@ namespace DocLock.Service.Services
 
         public async Task<UserDto> LoginAsync(string email, string password)
         {
+            var userTask = _userRepository.LoginAsync(email, password); 
+            var user = await userTask; 
+            if (user == null)
+            {
+                return null; 
+            }
 
-
-            var user = _userRepository.LoginAsync(email,password);
             return _mapper.Map<UserDto>(user);
         }
 
