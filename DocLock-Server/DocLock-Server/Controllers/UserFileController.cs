@@ -54,7 +54,7 @@ namespace DocLock_Server.Controllers
         // GET api/<FileController>/5
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFileById(int id)
+        public async Task<ActionResult> GetFileById(int id)
         {
             var file = await _userFileService.GetUserFileByIdAsync(id);
             if (file == null)
@@ -62,7 +62,36 @@ namespace DocLock_Server.Controllers
 
             return Ok(file);
         }
+        [HttpGet("filesShared/{email}")]
+        public async Task<ActionResult> GetFileshareByEmail(string email)
+        {
+            var file = await _userFileService.GetFileShareByEmail(email);
+            return Ok(file);
+        }
 
+
+
+        // POST api/<FileController>
+        [HttpPost("Sharing/{id}")]
+        public async Task<ActionResult> SharingFile(int id, [FromBody] string email)
+        {
+            var result = await _userFileService.SharingFileAsync(id, email);
+            if (result == null)
+                return NotFound("File not found.");
+            return Ok(result);
+        }
+
+        [HttpPost("CheckingIsAllowedView/{id}")]
+        public async Task<ActionResult> CheckingIsAllowedView(string email, [FromBody] SharingFileDto sharingFileDTO)
+        {
+            var res = await _userFileService.CheckingIsAllowedViewAsync(email, sharingFileDTO);
+            if (!res)
+                return Unauthorized("Not allowed viewing");
+            var result = await _userFileService.GetDecryptFileAsync(sharingFileDTO);
+            if (result == null)
+                return NotFound("File not found.");
+            return Ok(res);
+        }
         [HttpPost("IsFile/{id}")]
         public async Task<ActionResult> IsFileExist(int id, [FromBody] string name)
         {
@@ -72,7 +101,7 @@ namespace DocLock_Server.Controllers
 
         // POST api/<FileController>
 
-        [HttpPost("upload/{id}")]
+        [HttpPost("upload/{File}")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadFile(int id, [FromForm] UploadFileRequestDto request)
         {
@@ -82,6 +111,22 @@ namespace DocLock_Server.Controllers
             var userId = id; // לממש בהתאם
             var result = await _userFileService.UploadFileAsync(request.File, request.FileName, request.Password, userId, request.FileType);
             return Ok(new { encryptedLink = result });
+        }
+
+        [HttpPost("decrypt-file")]
+        public async Task<IActionResult> GetDecryptFile([FromBody] SharingFileDto request)
+        {
+            var result = await _userFileService.GetDecryptFileAsync(request);
+            if (result == null)
+            {
+                return Unauthorized("Invalid password or file not found.");
+            }
+
+            // החזרת הקובץ להורדה
+            return result;
+
+
+
         }
 
         // PUT api/<FileController>/5

@@ -22,7 +22,7 @@ namespace DocLock.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=KLIX_Link;Username=postgres;Password=postgresql123");
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=DocLockDB;Username=postgres;Password=postgresql123");
             }
             optionsBuilder.LogTo(m => Console.WriteLine(m));
             base.OnConfiguring(optionsBuilder);

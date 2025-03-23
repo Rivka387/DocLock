@@ -17,12 +17,16 @@ namespace DocLock.Core.IRepositories
         public Task<UserFile[]> GetUserFilesByUserIdAsync(int userId);
         public Task<bool> IsFileNameExistsAsync(int ownerId, string fileName);
         public Task<UserFile> GetFileByUrlAsync(string fileUrl);
+        public Task<List<UserFile>> GetFileShareByEmail(string email);
+        public Task<bool> CheckingIsAllowedEmailAsync(int id, string email);
 
         //POST
         public Task<UserFile> AddFileAsync(UserFile file);
 
         //PUT
         public Task<bool> UpdateFileNameAsync(UserFile userFile);
+        public Task<bool> UpdateEmailListAsync(int id, string email);
+
 
 
         //DELETE

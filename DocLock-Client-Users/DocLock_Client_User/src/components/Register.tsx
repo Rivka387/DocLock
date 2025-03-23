@@ -24,8 +24,8 @@ const Register = observer((() => {
     const sendVerificationCode = (email: string) => {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         setVerificationCode(code);
-        const subject=`Verify your email for KLIX-Link ${code}`
-        const body=`Hello, ${nameRef.current?.value}. Your verification code for KLIX-Link is ${code}.\n Please use it to complete your registration process.`
+        const subject=`Verify your email for DocLock ${code}`
+        const body=`Hello, ${nameRef.current?.value}. Your verification code for DocLock is ${code}.\n Please use it to complete your registration process.`
         userStore.sendEmail(email, subject, body);
         console.log(`Verification code sent to ${email}: ${code}`);
         setIsDialogOpen(true);

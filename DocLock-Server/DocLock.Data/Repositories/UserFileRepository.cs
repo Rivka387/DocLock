@@ -59,6 +59,10 @@ namespace DocLock.Data.Repositories
             return res != null;
         }
 
+        public async Task<List<UserFile>> GetFileShareByEmail(string email)
+        {
+            return _dataContext._Files.Include(s => s.EmailAloowed).ToList();
+        }
         //PUT
         public async Task<bool> UpdateFileNameAsync(UserFile userFile)
         {
@@ -66,6 +70,8 @@ namespace DocLock.Data.Repositories
             var userFileToUpdate = await _dataContext._Files.FirstOrDefaultAsync(file => file.Id == userFile.Id);
             if (userFileToUpdate == null) return false;
             userFileToUpdate.FileName = userFile.FileName;
+            userFileToUpdate.UpdateAt = DateOnly.FromDateTime(DateTime.Now);
+
             try
             {
                 await _dataContext.SaveChangesAsync();
@@ -76,6 +82,25 @@ namespace DocLock.Data.Repositories
                 return false;
             }
 
+        }
+
+        public async Task<bool> UpdateEmailListAsync(int id, string email)
+        {
+            try
+            {
+                var userFile = await _dataContext._Files.FirstOrDefaultAsync(file => file.Id == id);
+                if (userFile == null) return false;
+                userFile.EmailAloowed.Add(email);
+                userFile.UpdateAt = DateOnly.FromDateTime(DateTime.Now);
+
+
+                await _dataContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
 
@@ -94,6 +119,7 @@ namespace DocLock.Data.Repositories
                 return null;
             }
         }
+   
 
         //DELETE
         public async Task<bool> DeleteFileAsync(int id)
@@ -114,6 +140,12 @@ namespace DocLock.Data.Repositories
             }
         }
 
+        public async Task<bool> CheckingIsAllowedEmailAsync(int id, string email)
+        {
+            return await _dataContext._Files.AnyAsync(file => file.Id == id && file.EmailAloowed.Any(e => e == email));
 
+        }
+
+      
     }
 }

@@ -25,14 +25,16 @@ namespace DocLock.Service.Services
     {
         private readonly IUserFileRepository _userFileRepository;
         private readonly S3Service _fileStorageService;
+        private readonly IUserService _userService;
         private readonly string _encryptionKey;
         readonly IMapper _mapper;
 
-        public UserFileService(IUserFileRepository fileRepository, S3Service fileStorageService, IConfiguration configuration, IMapper mapper)
+        public UserFileService(IUserFileRepository fileRepository, S3Service fileStorageService, IConfiguration configuration, IMapper mapper, IUserService userService)
         {
             _userFileRepository = fileRepository;
             _fileStorageService = fileStorageService;
             _mapper = mapper;
+            _userService = userService;
             _encryptionKey = configuration["ENCRYPTION_KEY"];
 
         }
@@ -60,17 +62,19 @@ namespace DocLock.Service.Services
         }
 
 
-        public async Task<FileContentResult> GetDecryptFileAsync(string encryptedLink, string password)
+        public async Task<FileContentResult> GetDecryptFileAsync(SharingFileDto decryption)
         {
             // פענוח הקישור כדי לקבל את הנתיב לקובץ ב-S3
-            string fileUrl = DecryptLink(encryptedLink, _encryptionKey);
 
-            // חיפוש הקובץ במסד הנתונים
-            var userFile = await _userFileRepository.GetFileByUrlAsync(fileUrl);
-            if (userFile == null || userFile.FilePassword != password)
+
+            var userFile = await _userFileRepository.GetFileByIdAsync(decryption.Id);
+
+            if (userFile == null || userFile.FilePassword != decryption.Password)
             {
                 return null; // סיסמה לא נכונה או קובץ לא נמצא
             }
+
+            string fileUrl = DecryptLinkOrPassword(userFile.EncryptedLink, _encryptionKey);
 
             // הורדת הקובץ המוצפן מ-S3
             var encryptedFileBytes = await _fileStorageService.DownloadFileAsync(fileUrl);
@@ -78,10 +82,8 @@ namespace DocLock.Service.Services
             {
                 return null; // הקובץ לא נמצא ב-S3
             }
-
             // פענוח הקובץ
             byte[] decryptedFile = DecryptFile(encryptedFileBytes, _encryptionKey);
-
             return new FileContentResult(decryptedFile, userFile.FileType)
             {
                 FileDownloadName = userFile.FileName + "." + userFile.FileType // שם ברירת מחדל לקובץ, אפשר להחליף בשם שמגיע ממסד הנתונים
@@ -93,6 +95,14 @@ namespace DocLock.Service.Services
         public async Task<bool> IsFileNameExists(int id, string name)
         {
             return await _userFileRepository.IsFileNameExistsAsync(id, name);
+        }
+
+        public async Task<List<UserFileDto>> GetFileShareByEmail(string email)
+        {
+            var res = await _userFileRepository.GetFileShareByEmail(email);
+            var filteredFiles = res.Where(x => x.EmailAloowed.Any(e => email == e)).ToList();
+            return _mapper.Map<List<UserFileDto>>(filteredFiles);
+
         }
 
         //PUT
@@ -113,7 +123,7 @@ namespace DocLock.Service.Services
                     return false;
                 }
                 userFile.FileLink = newLink;
-                userFile.EncryptedFileLink = EncryptLink(userFile.FileLink, _encryptionKey);
+                userFile.EncryptedLink = EncryptLinkOrPassword(userFile.FileLink, _encryptionKey);
                 userFile.FileName = newFileName;
                 return await _userFileRepository.UpdateFileNameAsync(userFile);
             }
@@ -126,6 +136,43 @@ namespace DocLock.Service.Services
 
 
         //POST
+        public async Task<bool> IsFileNameExist(int id, string name)
+        {
+            return await _userFileRepository.IsFileNameExistsAsync(id, name);
+        }
+
+        public async Task<bool> CheckingIsAllowedViewAsync(string email, SharingFileDto sharingFile)
+        {
+            string decryptionpassword = DecryptLinkOrPassword(sharingFile.Password, _encryptionKey);
+            string[] arr = decryptionpassword.Split(',');
+            var userFile = await _userFileRepository.GetFileByIdAsync(sharingFile.Id);
+
+            if (arr[0] != userFile.Id.ToString() || arr[1] != email)
+            {
+                return false;
+            }
+
+            return await _userFileRepository.CheckingIsAllowedEmailAsync(userFile.Id, email);
+        }
+
+        public async Task<SharingFileDto> SharingFileAsync(int id, string email)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return null;
+            }
+            var userFile = await _userFileRepository.GetFileByIdAsync(id);
+            if (userFile == null) { return null; }
+            await _userFileRepository.UpdateEmailListAsync(id, email);
+            string keyuser = userFile.Id.ToString() + ',' + email;
+            string password = EncryptLinkOrPassword(keyuser, _encryptionKey);
+            return new SharingFileDto
+            {
+                Id = userFile.Id,
+                Password = password
+            };
+        }
         public async Task<string> UploadFileAsync(IFormFile file, string fileName, string password, int userId, string type)
         {
             string fileType = type;
@@ -140,7 +187,7 @@ namespace DocLock.Service.Services
                 return null;
             }
             // הצפנת הקישור
-            string encryptedLink = EncryptLink(fileUrl, _encryptionKey);
+            string encryptedLink = EncryptLinkOrPassword(fileUrl, _encryptionKey);
 
             // שמירה במסד הנתונים
             await _userFileRepository.AddFileAsync(new UserFile
@@ -148,7 +195,7 @@ namespace DocLock.Service.Services
                 OwnerId = userId,
                 FileName = fileName,
                 FileLink = fileUrl,
-                EncryptedFileLink = encryptedLink,
+                EncryptedLink = encryptedLink,
                 FilePassword = password,
                 FileType = fileType
             });
@@ -167,7 +214,7 @@ namespace DocLock.Service.Services
                     return false;
                 }
                 //הוצאת המפתח של הקובץ מהקישור
-                var fileKey = userFile.FileLink.Contains("s3.amazonaws.com") ?
+                 var fileKey = userFile.FileLink.Contains("s3.amazonaws.com") ?
                  userFile.FileLink.Split(new[] { ".s3.amazonaws.com/" }, StringSplitOptions.None).Last() :
                  userFile.FileLink;
 
@@ -207,7 +254,7 @@ namespace DocLock.Service.Services
         }
 
 
-        private string EncryptLink(string data, string key)
+        private string EncryptLinkOrPassword(string data, string key)
         {
             byte[] dataBytes = Encoding.UTF8.GetBytes(data);
             using (var aes = Aes.Create())
@@ -224,7 +271,7 @@ namespace DocLock.Service.Services
         }
 
 
-        private string DecryptLink(string encryptedLink, string key)
+        private string DecryptLinkOrPassword(string encryptedLink, string key)
         {
             byte[] encryptedBytes = Convert.FromBase64String(encryptedLink);
 

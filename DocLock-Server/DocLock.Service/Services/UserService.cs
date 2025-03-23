@@ -24,11 +24,7 @@ namespace DocLock.Service.Services
             _roleRepository = roleRepository;
             _userRepository = userRepository;
         }
-        public async Task<bool> DeleteUserAsync(int id)
-        {
-            return await _userRepository.DeleteUserAsync(id);
-        }
-
+        //GET
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             var res = await _userRepository.GetAllUsersAsync();
@@ -46,19 +42,19 @@ namespace DocLock.Service.Services
             var res = await _userRepository.GetUserByIdAsync(id);
             return _mapper.Map<UserDto>(res);
         }
-
         public async Task<UserDto> LoginAsync(string email, string password)
         {
-            var userTask = _userRepository.LoginAsync(email, password); 
-            var user = await userTask; 
+            var userTask = _userRepository.LoginAsync(email, password);
+            var user = await userTask;
             if (user == null)
             {
-                return null; 
+                return null;
             }
 
             return _mapper.Map<UserDto>(user);
         }
 
+        //PUT
         public async Task<UserDto> RegisterAsync(UserDto user, string[] roles)
         {
             var userEmail = await this.GetUserByEmailAsync(user.Email);
@@ -76,7 +72,7 @@ namespace DocLock.Service.Services
             }
             return _mapper.Map<UserDto>(res);
         }
-
+        //POST
 
 
         public async Task<bool> UpdateNameAsync(int id, string email)
@@ -88,6 +84,33 @@ namespace DocLock.Service.Services
         {
             return await _userRepository.UpdatePasswordAsync(id, email);
         }
+
+        public async Task<bool> EnableUserAsync(int id)
+        {
+            return await _userRepository.EnableUserAsync(id);
+        }
+
+        public async Task<bool> UpdateRoleAsync(int id, Role role)
+        {
+            return await _userRepository.UpdateRoleAsync(id, role);
+        }
+
+        public async Task<bool> DisableUserAsync(int id)
+        {
+            return await _userRepository.DisableUserAsync(id);
+        }
+
+        //DELETE
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            return await _userRepository.DeleteUserAsync(id);
+        }
+        
+
+       
+       
+
+
 
     }
 }
