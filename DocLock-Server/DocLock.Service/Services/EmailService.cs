@@ -26,9 +26,6 @@ namespace DocLock.Service.Services
 
         public async Task<bool> SendEmailAsync(EmailRequest request)
         {
-
-
-
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("DocLock", configuration["GOOGLE_USER_EMAIL"]));
             emailMessage.To.Add(new MailboxAddress(request.To, request.To));

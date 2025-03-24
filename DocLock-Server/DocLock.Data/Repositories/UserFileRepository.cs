@@ -61,7 +61,7 @@ namespace DocLock.Data.Repositories
 
         public async Task<List<UserFile>> GetFileShareByEmail(string email)
         {
-            return _dataContext._Files.Include(s => s.EmailAloowed).ToList();
+            return _dataContext._Files.ToList();
         }
         //PUT
         public async Task<bool> UpdateFileNameAsync(UserFile userFile)

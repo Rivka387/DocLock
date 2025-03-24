@@ -18,7 +18,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpPost("send")]
-        public async Task<IActionResult> SendEmail([FromBody] EmailRequest request)
+        public async Task<IActionResult> SendEmailAsync([FromBody] EmailRequest request)
         {
             await _emailService.SendEmailAsync(request);
             return Ok();

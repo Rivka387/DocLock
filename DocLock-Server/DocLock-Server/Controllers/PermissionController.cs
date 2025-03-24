@@ -18,14 +18,14 @@ namespace DocLock_Server.Controllers
         }
         // GET: api/<PermissionController>
         [HttpGet]
-        public async Task<ActionResult> GetAllPermissin()
+        public async Task<ActionResult> GetAllPermissinAsync()
         {
             return Ok(await _permissionService.GetPermissionsAsync());
         }
 
         // GET api/<PermissionController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetAsync(int id)
         {
             var res = await _permissionService.GetPermissionByIdAsync(id);
             if (res == null) return NotFound();
@@ -33,7 +33,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpGet("/name/{name}")]
-        public async Task<ActionResult> GetbyName(string name)
+        public async Task<ActionResult> GetbyNameAsync(string name)
         {
             var res = await _permissionService.GetPermissionByNameAsync(name);
             if (res == null) return NotFound();
@@ -42,7 +42,7 @@ namespace DocLock_Server.Controllers
 
         // POST api/<PermissionController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] PermissionDto permission)
+        public async Task<ActionResult> PostAsync([FromBody] PermissionDto permission)
         {
             var res = await _permissionService.AddPermissionAsync(permission);
             if (res == null) return BadRequest();
@@ -51,7 +51,7 @@ namespace DocLock_Server.Controllers
 
         // PUT api/<PermissionController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] PermissionDto permission)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] PermissionDto permission)
         {
             var res = await _permissionService.UpdatePermissionAsync(id, permission);
             if (res == null) return BadRequest();
@@ -60,7 +60,7 @@ namespace DocLock_Server.Controllers
 
         // DELETE api/<PermissionController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             var res = await _permissionService.RemovePermissionAsync(id);
             if (!res) return NotFound();

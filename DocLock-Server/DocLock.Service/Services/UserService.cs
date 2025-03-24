@@ -9,6 +9,8 @@ using DocLock.Core.Entities;
 using DocLock.Core.IRepositories;
 using DocLock.Core.IServices;
 using DocLock.Core.Repositories;
+using DocLock.Data;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace DocLock.Service.Services
@@ -17,17 +19,24 @@ namespace DocLock.Service.Services
     {
         readonly IUserRepository _userRepository;
         readonly IRoleRepository _roleRepository;
+        readonly IUserActivityRepository _userActivityRepository;
+        readonly DataContext _dataContext;
+
         readonly IMapper _mapper;
-        public UserService(IMapper mapper, IUserRepository userRepository,IRoleRepository roleRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository,IRoleRepository roleRepository, IUserActivityRepository userActivityRepository, DataContext dataContext)
         {
             _mapper = mapper;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
+            _userActivityRepository = userActivityRepository;
+            _dataContext = dataContext;
+
         }
         //GET
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             var res = await _userRepository.GetAllUsersAsync();
+            res = res.ToList().Where(user => !user.Roles.Any(role => role.RoleName == "Admin"));
             return _mapper.Map<UserDto[]>(res);
         }
 
@@ -44,11 +53,10 @@ namespace DocLock.Service.Services
         }
         public async Task<UserDto> LoginAsync(string email, string password)
         {
-            var userTask = _userRepository.LoginAsync(email, password);
-            var user = await userTask;
-            if (user == null)
+            var user =  await _userRepository.LoginAsync(email, password);
+            if (user != null)
             {
-                return null;
+                await _userActivityRepository.LogActivityAsync(user.Id, "Login");
             }
 
             return _mapper.Map<UserDto>(user);
@@ -57,6 +65,11 @@ namespace DocLock.Service.Services
         //PUT
         public async Task<UserDto> RegisterAsync(UserDto user, string[] roles)
         {
+            if (user == null)
+            {
+                // טיפול במקרה שבו user הוא null
+                return null;
+            }
             var userEmail = await this.GetUserByEmailAsync(user.Email);
             if (userEmail != null)
             {
@@ -69,6 +82,8 @@ namespace DocLock.Service.Services
                 {
                     await _userRepository.UpdateRoleAsync(res.Id, await _roleRepository.GetRoleByNameAsync(roles[i]));
                 }
+                await _userActivityRepository.LogActivityAsync(res.Id, "Register");
+
             }
             return _mapper.Map<UserDto>(res);
         }

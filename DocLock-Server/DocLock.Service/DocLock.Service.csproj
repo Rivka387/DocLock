@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocLock.Core\DocLock.Core.csproj" />
+    <ProjectReference Include="..\DocLock.Data\DocLock.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

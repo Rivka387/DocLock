@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace DocLock.Data
         public DbSet<UserFile> _Files { get; set; }
         public DbSet<Role> _Roles { get; set; }
         public DbSet<Permission> _Permissions { get; set; }
+        public DbSet<UserActivityLog> _UserActivityLogs { get; set; }
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
@@ -22,7 +25,7 @@ namespace DocLock.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=DocLockDB;Username=postgres;Password=postgresql123");
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=postgresql123");
             }
             optionsBuilder.LogTo(m => Console.WriteLine(m));
             base.OnConfiguring(optionsBuilder);

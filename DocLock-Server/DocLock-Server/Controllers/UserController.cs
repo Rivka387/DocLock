@@ -48,7 +48,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpGet("email")]
-        public async Task<ActionResult<UserDto>> GetUserByEmail([FromBody] string email)
+        public async Task<ActionResult<UserDto>> GetUserByEmailAsync([FromBody] string email)
         {
             if (string.IsNullOrEmpty(email))
                 return BadRequest("Email is required.");
@@ -68,7 +68,7 @@ namespace DocLock_Server.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("/name/{id}")]
-            public async Task<ActionResult<bool>> UpdateName(int id, [FromBody] string value)
+            public async Task<ActionResult<bool>> UpdateNameAsync(int id, [FromBody] string value)
             {
                 if (string.IsNullOrEmpty(value))
                 {
@@ -87,7 +87,7 @@ namespace DocLock_Server.Controllers
 
 
         [HttpPut("/password/{id}")]
-        public async Task<ActionResult<bool>> UpdatePassword(int id, [FromBody] string password)
+        public async Task<ActionResult<bool>> UpdatePasswordAsync(int id, [FromBody] string password)
         {
             if (string.IsNullOrEmpty(password) || password.Length < 6)
             {
@@ -105,7 +105,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpPut("/enable/{id}")]
-        public async Task<ActionResult<bool>> EnableUser(int id)
+        public async Task<ActionResult<bool>> EnableUserAsync(int id)
         {
             var res = await _userService.EnableUserAsync(id);
             if (!res)
@@ -114,7 +114,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpPut("/disable/{id}")]
-        public async Task<ActionResult<bool>> DisableUser(int id)
+        public async Task<ActionResult<bool>> DisableUserAsync(int id)
         {
             var res = await _userService.DisableUserAsync(id);
             if (!res)
@@ -126,7 +126,7 @@ namespace DocLock_Server.Controllers
 
         [Authorize(Policy = "EditorOrAdmin")]
         [HttpDelete("/{id}")]
-        public async Task<ActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteUserAsync(int id)
         {
             var res =await _userService.DeleteUserAsync(id);
             if (!res)
