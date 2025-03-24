@@ -13,6 +13,7 @@ namespace DocLock.Service.Services
 {
     public class RoleService : IRoleService
     {
+
         readonly IRoleRepository _roleRepository;
         readonly IPermissionRepository _permissionRepository;
         readonly IMapper _mapper;
