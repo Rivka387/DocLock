@@ -46,11 +46,64 @@ const NavBar = () => {
                 </MenuItem>
             </Menu>
         </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button sx={{ color: "#FFFFFF" }} component={Link} to='/upload'>UPLOAD</Button>
-            <Button sx={{ color: "#FFFFFF" }} component={Link} to='/filelist'>filelist</Button>
-            <Button sx={{ color: "#FFFFFF" }} component={Link} to='/view-file'>view-file</Button>
-        </Box>
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 2, justifyContent: 'center' }}>
+    <Button 
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            mr: 2,
+            "&:hover": {
+                backgroundColor: "#74ad7d", 
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='/upload'
+    >
+        UPLOAD
+    </Button>
+    <Button
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            mr: 2,
+            "&:hover": {
+                backgroundColor: "#74ad7d",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='/filelist'
+    >
+        Filelist
+    </Button>
+    <Button
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            "&:hover": {
+                backgroundColor: "#74ad7d",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='/view-file'
+    >
+        View File
+    </Button>
+</Box>
     </>);
 };
 

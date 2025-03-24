@@ -5,3 +5,8 @@
   text-align: center;
 }
 
+@media (screen-capture) {
+  body {
+    filter: blur(10px);
+  }
+}

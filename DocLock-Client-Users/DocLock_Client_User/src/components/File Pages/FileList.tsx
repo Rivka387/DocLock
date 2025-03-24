@@ -3,10 +3,10 @@ import { observer } from "mobx-react-lite";
 import { Box, Typography, Grid2 as Grid, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import fileStore from "./FileStore";
-import userStore from "./userStore";
-import { UserFile } from "../types/UserFile";
+import userStore from "../User pages/userStore";
+import { UserFile } from "../../types/UserFile";
 import FileCard from "./FileCard";
-import Nofile from "./Nofile";
+import Nofile from "../Massages/Nofile";
 
 const FileList = observer(() => {
   const [openFiles, setOpenFiles] = useState<{ [key: string]: boolean }>({});

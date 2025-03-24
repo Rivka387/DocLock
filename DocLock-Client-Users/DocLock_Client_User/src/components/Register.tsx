@@ -3,8 +3,9 @@ import { Button, TextField, Grid2 as Grid, Box, Alert, Dialog, DialogActions, Di
 import { User } from '../types/User';
 import { Roles } from '../types/Roles';
 import { observer } from 'mobx-react-lite';
-import userStore from './userStore';
+
 import { Link, useNavigate } from 'react-router';
+import userStore from './User pages/userStore';
 const Register = observer((() => {
     const navigate = useNavigate(); 
 

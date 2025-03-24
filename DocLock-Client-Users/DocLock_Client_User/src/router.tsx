@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router';
 import Login from './components/login';
 import Register from './components/register';
-import UploadFile from './components/UploadFile';
-import FileList from './components/FileList';
+import UploadFile from './components/File Pages/UploadFile';
+import FileList from './components/File Pages/FileList';
 import AppLayout from './components/AppLayout';
-import ViewFile from './components/ViewFile';
+import ViewFile from './components/File Pages/ViewFile';
 import { JSX, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import userStore from './components/userStore';
+import userStore from './components/User pages/userStore';
 
 
 const TOKEN_EXPIRATION_TIME = 1000* 60 * 60 * 2; 
