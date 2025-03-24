@@ -23,6 +23,10 @@ namespace DocLock.Core.IServices
         public Task<UserDto> LoginAsync(string email, string password);
         public Task<bool> UpdatePasswordAsync(int id,string email);
         public Task<bool> UpdateNameAsync(int id, string email);
+
+        public Task<bool> UpdateRoleAsync(int id, Role role);
+        public Task<bool> EnableUserAsync(int id);
+        public Task<bool> DisableUserAsync(int id);
         //DELETE
         public Task<bool> DeleteUserAsync(int id);
 

@@ -19,8 +19,9 @@ namespace DocLock.Core.Entities
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-        public List<int> FilesId { get; set; }
-        public ICollection<Role>? Roles { get; set; }
+        public ICollection<UserFile> Files { get; set; } = new List<UserFile>();
+        [Required]
+        public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
         public bool IsActive { get; set; } = true;
 
         // public DateOnly CreatedAt { get; set; }

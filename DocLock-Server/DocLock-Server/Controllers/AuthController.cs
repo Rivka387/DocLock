@@ -22,35 +22,37 @@ namespace DocLock_Server.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
-        public AuthController(IConfiguration configuration, IUserService userService, IMapper mapper)
+        public AuthController(IConfiguration configuration, IUserService userService, IMapper mapper, IAuthService authService)
         {
             _configuration = configuration;
             _userService = userService;
             _mapper = mapper;
+            _authService = authService;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<ActionResult> LoginAsync([FromBody] LoginModel loginModel)
         {
-            if (EmailValidator.IsValidEmail(loginModel.Email))
-                return BadRequest("Email not valid");
 
-            if (string.IsNullOrEmpty(loginModel.Password)) return BadRequest("Password are required");
-
+            if (!EmailValidator.IsValidEmail(loginModel.Email))
+            {
+                return BadRequest("Email Not valid");
+            }
             var res = await _userService.LoginAsync(loginModel.Email, loginModel.Password);
             if (res == null)
+            {
                 return NotFound();
-            if(res.IsActive ==false)
+            }
+            if (res.IsActive == false)
                 return Unauthorized();
-
-            var tokenString = _authService.GenerateJwtToken(res.Name, res.Roles.Select(r => r.RoleName).ToArray());
+            var tokenString = _authService.GenerateJwtToken(res.Name, loginModel.Roles);
             return Ok(new { Token = tokenString, user = res });
         }
         
         // POST api/<UserController>
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] LoginModel loginModel)
+        public async Task<ActionResult> RegisterAsync([FromBody] RegisterPostModel userRegister)
         {
             if (EmailValidator.IsValidEmail(loginModel.Email))
                 return BadRequest("Email not valid");

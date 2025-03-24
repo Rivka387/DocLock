@@ -1,5 +1,4 @@
 
-using System.Text.Json.Serialization;
 using DocLock.Core;
 using DocLock.Core.IServices;
 using DocLock.Service.Services;
@@ -13,27 +12,39 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DocLock.Core.DTOS;
+using DocLock.Service;
+using DotNetEnv;
+using System.Text.Json.Serialization;
 
 
 
 
 
+Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 //Service
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IFileService, UserFileService>();
-
-
-
-//Repository
+builder.Services.AddScoped<IUserFileService, UserFileService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserActivityService, UserActivityService>();
+builder.Services.AddScoped<S3Service>();
 
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserFileRepository, UserFileRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
+
+
 
 
 
@@ -95,8 +106,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+builder.WebHost.UseUrls("http://localhost:3000");
 
 var app = builder.Build();
+
 
 
 // Configure the HTTP request pipeline.

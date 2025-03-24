@@ -38,6 +38,7 @@ namespace DocLock.Service.Services
             }
 
             var token = new JwtSecurityToken(
+
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,

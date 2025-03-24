@@ -14,6 +14,10 @@ namespace DocLock.Data
      
         public DbSet<User> _Users { get; set; }
         public DbSet<UserFile> _Files { get; set; }
+        public DbSet<Role> _Roles { get; set; }
+        public DbSet<Permission> _Permissions { get; set; }
+        public DbSet<UserActivityLog> _UserActivityLogs { get; set; }
+
 
         public DataContext(DbContextOptions<DataContext> options) :base(options) { }
 
@@ -21,7 +25,7 @@ namespace DocLock.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=DocLock;Username=doclock_user;Password=Rl0548547387");
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=postgresql123");
             }
 
             optionsBuilder.LogTo(m => Console.WriteLine(m));

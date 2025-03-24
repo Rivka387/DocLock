@@ -1,5 +1,5 @@
 {
-  "name": "docloc-client-user",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,17 +7,32 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "main": "src/mainProccess.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
+    "@mui/x-date-pickers": "^7.28.0",
+    "@reduxjs/toolkit": "^2.6.1",
+    "@types/react-redux": "^7.1.34",
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.8.3",
+    "electron": "^35.0.3",
+    "mobx": "^6.13.6",
+    "mobx-react": "^9.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.3.0",
+    "react-router-dom": "^7.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/electron": "^1.4.38",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

@@ -21,10 +21,10 @@ namespace DocLock.Data.Repositories
             _dataContext = dataContext;
         }
 
-
+        //GET
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return await _dataContext._Users.ToListAsync();
+            return await _dataContext._Users.Include(u => u.Roles).ToListAsync();
         }
 
 
@@ -39,8 +39,8 @@ namespace DocLock.Data.Repositories
             return await _dataContext._Users.FirstOrDefaultAsync(user => user.Id == id);
         }
 
-
-        public async Task<User> AddUserAsync(User user)
+        //POST
+        public async Task<User> AddUserAsync(User user, string[] roles)
         {
             {
                 try
@@ -116,6 +116,40 @@ namespace DocLock.Data.Repositories
         }
 
 
+            public async Task<bool> EnableUserAsync(int id)
+        {
+            try
+            {
+                var user = await _dataContext._Users.FindAsync(id);
+                if (user == null) return false;
+
+                user.IsActive = true;
+                await _dataContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DisableUserAsync(int id)
+        {
+            try
+            {
+                var user = await _dataContext._Users.FindAsync(id);
+                if (user == null) return false;
+
+                user.IsActive = false;
+                await _dataContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        //DELETE
         public async Task<bool> DeleteUserAsync(int id)
         {
             try
@@ -125,7 +159,7 @@ namespace DocLock.Data.Repositories
                 _dataContext._Users.Remove(res);
                 await _dataContext.SaveChangesAsync();
                 return true;
-                ;
+                
             }
             catch (Exception)
             {
@@ -134,6 +168,6 @@ namespace DocLock.Data.Repositories
             }
         }
 
-        
+      
     }
 }

@@ -16,16 +16,21 @@ namespace DocLock.Core.Repositories
         public Task<User> GetUserByEmailAsync(string email);
 
 
-        //Put
-        public Task<User> AddUserAsync(User user);
-
 
         //Post
+        public Task<User> AddUserAsync(User user, string[] roles);
+
+
+
+        //Put
         public Task<User> LoginAsync(string email, string password);
         public Task<bool> UpdatePasswordAsync(int id, string password);
         public Task<bool> UpdateNameAsync(int id, string name);
         public Task<bool> UpdateRoleAsync(int id, Role role);
 
+
+        public Task<bool> EnableUserAsync(int id);
+        public Task<bool> DisableUserAsync(int id);
         //Delete
         public Task<bool> DeleteUserAsync(int id);
 
