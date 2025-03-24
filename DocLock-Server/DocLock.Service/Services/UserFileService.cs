@@ -40,7 +40,6 @@ namespace DocLock.Service.Services
         }
 
 
-        //GET
         public async Task<IEnumerable<UserFileDto>> GetAllUserFilesAsync()
         {
             var res = await _userFileRepository.GetAllFilesAsync();
@@ -64,30 +63,26 @@ namespace DocLock.Service.Services
 
         public async Task<FileContentResult> GetDecryptFileAsync(SharingFileDto decryption)
         {
-            // פענוח הקישור כדי לקבל את הנתיב לקובץ ב-S3
 
 
             var userFile = await _userFileRepository.GetFileByIdAsync(decryption.Id);
 
             if (userFile == null || userFile.FilePassword != decryption.Password)
             {
-                return null; // סיסמה לא נכונה או קובץ לא נמצא
+                return null; 
             }
 
             string fileUrl = DecryptLinkOrPassword(userFile.EncryptedLink, _encryptionKey);
 
-            // הורדת הקובץ המוצפן מ-S3
             var encryptedFileBytes = await _fileStorageService.DownloadFileAsync(fileUrl);
             if (encryptedFileBytes == null)
             {
-                return null; // הקובץ לא נמצא ב-S3
+                return null; 
             }
-            // פענוח הקובץ
             byte[] decryptedFile = DecryptFile(encryptedFileBytes, _encryptionKey);
             return new FileContentResult(decryptedFile, userFile.FileType)
             {
-                FileDownloadName = userFile.FileName + "." + userFile.FileType // שם ברירת מחדל לקובץ, אפשר להחליף בשם שמגיע ממסד הנתונים
-            };
+                FileDownloadName = userFile.FileName + "." + userFile.FileType 
 
         }
 
@@ -105,7 +100,6 @@ namespace DocLock.Service.Services
 
         }
 
-        //PUT
         public async Task<bool> UpdateFileNameAsync(int fileId, string newFileName)
         {
             var userFile = await _userFileRepository.GetFileByIdAsync(fileId);
@@ -135,7 +129,6 @@ namespace DocLock.Service.Services
         }
 
 
-        //POST
         public async Task<bool> IsFileNameExist(int id, string name)
         {
             return await _userFileRepository.IsFileNameExistsAsync(id, name);
@@ -176,20 +169,14 @@ namespace DocLock.Service.Services
         public async Task<string> UploadFileAsync(IFormFile file, string fileName, string password, int userId, string type)
         {
             string fileType = type;
-            // הצפנת הקובץ
             byte[] encryptedData = EncryptFile(file, _encryptionKey, userId, fileName);
 
-            // העלאה ל-S3
-            // יצירת קישור ציבורי ל-S3
             string fileUrl = await _fileStorageService.UploadFileAsync(file, fileName, encryptedData);
             if (fileUrl == null)
             {
                 return null;
             }
-            // הצפנת הקישור
             string encryptedLink = EncryptLinkOrPassword(fileUrl, _encryptionKey);
-
-            // שמירה במסד הנתונים
             await _userFileRepository.AddFileAsync(new UserFile
             {
                 OwnerId = userId,
@@ -203,7 +190,6 @@ namespace DocLock.Service.Services
             return encryptedLink;
         }
 
-        //DELETE
         public async Task<bool> DeleteUserFileAsync(int id)
         {
             try
@@ -213,7 +199,6 @@ namespace DocLock.Service.Services
                 {
                     return false;
                 }
-                //הוצאת המפתח של הקובץ מהקישור
                  var fileKey = userFile.FileLink.Contains("s3.amazonaws.com") ?
                  userFile.FileLink.Split(new[] { ".s3.amazonaws.com/" }, StringSplitOptions.None).Last() :
                  userFile.FileLink;
@@ -278,8 +263,7 @@ namespace DocLock.Service.Services
             using (var aes = Aes.Create())
             {
                 aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); // Ensures 32-byte key
-                aes.IV = new byte[16]; // אותו IV ששימש בהצפנה
-
+                aes.IV = new byte[16]; 
                 using (var decryptor = aes.CreateDecryptor())
                 {
                     byte[] decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
@@ -293,8 +277,8 @@ namespace DocLock.Service.Services
         {
             using (var aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); // Ensures 32-byte key
-                aes.IV = new byte[16]; // אותו IV ששימש בהצפנה
+                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); 
+                aes.IV = new byte[16];
 
                 using (var decryptor = aes.CreateDecryptor())
                 {
