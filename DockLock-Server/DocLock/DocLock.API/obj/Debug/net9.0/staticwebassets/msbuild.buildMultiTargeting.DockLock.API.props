@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\DockLock.API.props" />
-</Project>
