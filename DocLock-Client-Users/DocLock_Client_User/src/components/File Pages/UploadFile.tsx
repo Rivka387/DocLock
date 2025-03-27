@@ -78,9 +78,18 @@ const FileUpload = observer(() => {
 
   return (
     <>
-      <Card sx={{ maxWidth: 400, margin: "auto", padding: 2, textAlign: "center", border: "1px solid #6fa8cb", borderRadius: 2 }}>
+      <Card sx={{
+        maxWidth: 400, 
+        margin: "auto", 
+        padding: 3, 
+        textAlign: "center", 
+        border: "1px solid #c6d9e4", // צבע מסגרת עדין
+        borderRadius: 2, 
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // הצללה עדינה
+        backgroundColor: "#fafafa"
+      }}>
         <CardContent>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: 2, color: "#333" }}>
             File Upload
           </Typography>
           {!file ? (
@@ -96,21 +105,34 @@ const FileUpload = observer(() => {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                borderRadius: 1,
+                transition: "background-color 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#f1f1f1", // רקע בהעברת עכבר
+                }
               }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
               <CloudUpload sx={{ fontSize: 50, color: "#6fa8cb" }} />
-              <Typography>Drag and drop a file here</Typography>
+              <Typography variant="body2" sx={{ color: "#666", marginTop: 1 }}>
+                Drag and drop a file here
+              </Typography>
             </Box>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 2 }}>
               <Description sx={{ fontSize: 50, color: "#6fa8cb", marginBottom: 1 }} />
-              <Typography variant="body2" sx={{ marginBottom: 2 }}>
+              <Typography variant="body2" sx={{ marginBottom: 2, color: "#333" }}>
                 File selected: {file.name}
               </Typography>
-              <Button variant="outlined" color="error" onClick={handleCancel} startIcon={<Cancel />} sx={{ marginBottom: 2 }}>
+              <Button 
+                variant="outlined" 
+                color="error" 
+                onClick={handleCancel} 
+                startIcon={<Cancel />} 
+                sx={{ marginBottom: 2, textTransform: "none" }}
+              >
                 Cancel Selection
               </Button>
             </Box>
@@ -122,10 +144,14 @@ const FileUpload = observer(() => {
                 variant="outlined"
                 component="span"
                 sx={{
+                  textTransform: "none",
                   "&:hover": {
-                    backgroundColor: "#6fa8cb", // הצבע ברקע בעת מעבר עכבר
-                    color: "#fff", // שינוי הצבע של הטקסט
+                    backgroundColor: "#6fa8cb", 
+                    color: "#fff", 
                   },
+                  padding: "8px 24px", 
+                  borderRadius: 2, 
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                 }}
               >
                 Choose File
@@ -138,6 +164,7 @@ const FileUpload = observer(() => {
             margin="normal"
             value={fileName}
             onChange={(e) => setFileName(e.target.value)}
+            sx={{ marginBottom: 2 }}
           />
           <TextField
             label="Password"
@@ -146,8 +173,14 @@ const FileUpload = observer(() => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            sx={{ marginBottom: 2 }}
           />
-          <Button variant="contained" color="primary" onClick={handleUpload} sx={{ marginTop: 2 }}>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleUpload} 
+            sx={{ marginTop: 2, textTransform: "none", padding: "10px 20px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}
+          >
             Upload
           </Button>
         </CardContent>

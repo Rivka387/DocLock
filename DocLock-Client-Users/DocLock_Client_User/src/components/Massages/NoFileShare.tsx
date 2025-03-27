@@ -30,7 +30,7 @@ function NoFileShare() {
             No Shared Files Yet
           </Typography>
           <Typography variant="body1" sx={{ color: '#555' }}>
-            You haven’t shared any files yet. Upload and share securely with others.
+            You havenâ€™t shared any files yet. Upload and share securely with others.
           </Typography>
         </CardContent>
       </Card>
