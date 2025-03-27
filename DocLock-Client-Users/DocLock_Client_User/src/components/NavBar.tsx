@@ -67,7 +67,7 @@ const NavBar = () => {
             }
         }}
         component={Link}
-        to='./about'
+        to='/About'
     >
         About
     </Button>

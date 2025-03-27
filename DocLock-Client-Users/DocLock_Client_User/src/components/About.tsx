@@ -4,8 +4,7 @@ import { Lock, VisibilityOff, Sync, Verified, Speed, Brightness4, Brightness7 } 
 import logo from "../assets/loggo.png";
 
 const About: React.FC = () => {
-  // הגדרת המצב כהה כברירת מחדל
-  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState<boolean>(false);
 
   const handleModeToggle = () => {
     setDarkMode(prevMode => !prevMode);

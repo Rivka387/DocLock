@@ -46,8 +46,6 @@ export default function Nofile() {
             }}
             startIcon={<Upload />} 
             href="/upload"
-        sx={{ textTransform: 'none', borderRadius: 1, paddingX: 3, paddingY: 1.5,
-        }}
           >
             Upload File
           </Button>

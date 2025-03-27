@@ -1,22 +1,17 @@
 import React, { useRef, useState } from 'react';
-import { Button, TextField, Grid2 as Grid, Box, Alert,  } from '@mui/material';
-import { Link, useNavigate } from 'react-router';
-
+import { Button, TextField, Grid, Box, Alert } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import { Roles } from '../types/Roles';
 import { observer } from 'mobx-react-lite';
 import userStore from './User pages/userStore';
 
 const Login = observer(() => {
-
     const navigate = useNavigate();
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const [alertInfo, setAlertInfo] = useState<{ severity: 'success' | 'error' | 'warning' | 'info', message: string } | null>(null);
 
-    const validateEmail = (email: string) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    };
+    const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const validatePasswordStrength = (password: string) => {
         if (password.length < 6) return 'Weak';
@@ -35,20 +30,15 @@ const Login = observer(() => {
                 return;
             }
 
-            const passwordStrength = validatePasswordStrength(password);
-            if (passwordStrength === 'Weak') {
+            if (validatePasswordStrength(password) === 'Weak') {
                 setAlertInfo({ severity: 'warning', message: 'Password is too weak. Please choose a stronger password.' });
                 return;
             }
 
             try {
-                // await dispatch(loginUser({ email, password })).unwrap();
-                userStore.loginUser(email, password, [Roles.User]).then(() => {
-                    
+                await userStore.loginUser(email, password, [Roles.User]);
                 console.log(userStore.user.id, userStore.token);
                 navigate('/');
-                });
-                
                 setAlertInfo({ severity: 'success', message: 'Successfully logged in!' });
             } catch (error) {
                 setAlertInfo({ severity: 'error', message: 'Failed to login. Please check your credentials and try again.' });
@@ -68,20 +58,37 @@ const Login = observer(() => {
             )}
             <form onSubmit={handleLogin}>
                 <Grid container spacing={2}>
-                    <Grid size={12}>
-                        <TextField label="Email" inputRef={emailRef} fullWidth required />
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Email"
+                            inputRef={emailRef}
+                            fullWidth
+                            required
+                            onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("This field is required.")}
+                            onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
+                        />
                     </Grid>
-                    <Grid size={12}>
-                        <TextField type="password" label="Password" inputRef={passwordRef} fullWidth required />
+                    <Grid item xs={12}>
+                        <TextField
+                            type="password"
+                            label="Password"
+                            inputRef={passwordRef}
+                            fullWidth
+                            required
+                            onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity("This field is required.")}
+                            onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
+                        />
                     </Grid>
-                    <Grid size={12}>
+                    <Grid item xs={12}>
                         <Button type="submit" variant="contained" color="primary" fullWidth>
                             Login
                         </Button>
                     </Grid>
                 </Grid>
             </form>
-            <Button type="button" component={Link} to='/register'> don't have an account? Sign up</Button>
+            <Button type="button" component={Link} to='/register'>
+                Don't have an account? Sign up
+            </Button>
         </Box>
     );
 });

@@ -27,8 +27,8 @@ const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
           alt="DocLock Logo"
           style={{ height: "55px", marginRight: "5px" }}
         />
-        <Typography variant="h5"  fontFamily="cursive"align="left"  marginLeft="10px" sx={{ flexGrow: 1 }}>
-         DocLock
+        <Typography variant="h4"  fontFamily="cursive"align="left"  marginLeft="10px" sx={{ flexGrow: 1 }}>
+        DocLock
         </Typography>  
        {userStore.getUserId()&& <NavBar /> }              
             
