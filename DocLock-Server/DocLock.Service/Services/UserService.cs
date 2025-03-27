@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
-using DocLock.Core.IRepositories;
 using DocLock.Core.IServices;
 using DocLock.Core.Repositories;
 using DocLock.Data;
@@ -26,7 +25,6 @@ namespace DocLock.Service.Services
         public UserService(IMapper mapper, IUserRepository userRepository,IRoleRepository roleRepository, IUserActivityRepository userActivityRepository, DataContext dataContext)
         {
             _mapper = mapper;
-            _roleRepository = roleRepository;
             _userRepository = userRepository;
             _userActivityRepository = userActivityRepository;
             _dataContext = dataContext;
@@ -86,6 +84,8 @@ namespace DocLock.Service.Services
 
             }
             return _mapper.Map<UserDto>(res);
+
+
         }
         //POST
 

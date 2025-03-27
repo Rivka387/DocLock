@@ -48,26 +48,23 @@ namespace DocLock_Server.Controllers
             var tokenString = _authService.GenerateJwtToken(res.Name, loginModel.Roles);
             return Ok(new { Token = tokenString, user = res });
         }
-
+        
         // POST api/<UserController>
 
         [HttpPost("register")]
         public async Task<ActionResult> RegisterAsync([FromBody] RegisterPostModel userRegister)
         {
-            if (!EmailValidator.IsValidEmail(userRegister.User.Email))
-            {
-                return BadRequest("Email Not valid");
+            if (EmailValidator.IsValidEmail(loginModel.Email))
+                return BadRequest("Email not valid");
+            if (string.IsNullOrEmpty(loginModel.Password)) return BadRequest("Password are required");
 
-            }
-
-            var res = await _userService.RegisterAsync(_mapper.Map<UserDto>(userRegister.User), userRegister.Roles);
+            var res = await _userService.RegisterAsync(_mapper.Map<UserDto>(loginModel));
             if (res == null)
-            {
                 return BadRequest();
-            }
 
-            var tokenString = _authService.GenerateJwtToken(res.Name, userRegister.Roles);
-            return Ok(new { Token = tokenString, user = res });
+                var tokenString = _authService.GenerateJwtToken(res.Name, res.Roles.Select(r => r.RoleName).ToArray());
+                return Ok(new { Token = tokenString ,user = res});
+            
         }
     }
 }
