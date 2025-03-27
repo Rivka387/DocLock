@@ -1,9 +1,10 @@
-import './App.css'
+
 import { Provider } from 'react-redux'
-import store from './components/store'
-import { router } from './router'
-import { RouterProvider } from 'react-router'
+import './App.css'
+import store from './store'
 import { ThemeProvider } from '@emotion/react'
+import { RouterProvider } from 'react-router'
+import { router } from './router'
 import theme from './Them'
 
 function App() {
@@ -24,3 +25,5 @@ function App() {
 }
 
 export default App
+
+

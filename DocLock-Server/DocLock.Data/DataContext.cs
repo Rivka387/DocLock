@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using DocLock.Core.DTOS;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DocLock.Data
 {
-    public class DataContext: DbContext, IDataContext
+    public class DataContext : DbContext, IDataContext
     {
      
         public DbSet<User> _Users { get; set; }
@@ -19,7 +20,7 @@ namespace DocLock.Data
         public DbSet<UserActivityLog> _UserActivityLogs { get; set; }
 
 
-        public DataContext(DbContextOptions<DataContext> options) :base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +32,21 @@ namespace DocLock.Data
             optionsBuilder.LogTo(m => Console.WriteLine(m));
             base.OnConfiguring(optionsBuilder);
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserFile>()
+                .HasOne(uf => uf.User)
+                .WithMany(u => u.Files)
+                .HasForeignKey(uf => uf.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+         .HasIndex(u => u.Email)
+         .IsUnique();
+
+            base.OnModelCreating(modelBuilder);
+        }
+
         public async Task<int> SaveChangesAsync()
         {
             return await base.SaveChangesAsync();

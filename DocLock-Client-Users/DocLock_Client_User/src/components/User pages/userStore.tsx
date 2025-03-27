@@ -15,6 +15,9 @@ class UserStore {
         makeAutoObservable(this);
         
     }
+    getUserId() {
+        return parseInt(sessionStorage.getItem('userId') as string);
+    }
 
     setSessionStorage(token: string | null) {
         this.token = token;
@@ -24,19 +27,19 @@ class UserStore {
             sessionStorage.setItem("loginTime", Date.now().toString());
             this.fetchUser(parseInt(sessionStorage.getItem('userId') as string));
         } else {
-          sessionStorage.removeItem("token"); // ניקוי לאחר יציאה
-          sessionStorage.removeItem('userId'); 
-          sessionStorage.removeItem("loginTime");
+            sessionStorage.removeItem("token"); // ניקוי לאחר יציאה
+            sessionStorage.removeItem('userId');
+            sessionStorage.removeItem("loginTime");
         }
-      }
-    
+    }
 
-      logout() {
+
+    logout() {
         this.setSessionStorage(null);
-      }
+    }
 
 
-    async fetchUser(userId:number){
+    async fetchUser(userId: number) {
         this.loading = true;
         this.error = null;
         try {
@@ -54,19 +57,19 @@ class UserStore {
     }
 
 
-    async registerUser(user:Partial<User>,roles:Roles[]) {
+    async registerUser(user: Partial<User>, roles: Roles[]) {
         this.loading = true;
         this.error = null;
         try {
             console.log(JSON.stringify({ user: user, roles: roles }, null, 2));
-            const response = await axios.post(`${url}/Auth/register`, {user:user,roles:roles}, {
+            const response = await axios.post(`${url}/Auth/register`, { user: user, roles: roles }, {
                 headers: { "Content-Type": "application/json" }
             });
             runInAction(() => {
                 this.user = response.data.user;
                 this.token = response.data.token;
-                console.log(this.user,this.token);
-                if(this.token){
+                console.log(this.user, this.token);
+                if (this.token) {
                     sessionStorage.setItem('token', this.token);
                     sessionStorage.setItem('userId',this.user.id.toString()); 
                     sessionStorage.setItem("loginTime", Date.now().toString());
@@ -77,7 +80,7 @@ class UserStore {
 
                 this.loading = false;
             });
-        } catch (error:any) {
+        } catch (error: any) {
             runInAction(() => {
                 this.error = error.message || "Failed to register user";
                 this.loading = false;
@@ -86,7 +89,7 @@ class UserStore {
     }
 
 
-    async deleteUser(userId:number) {
+    async deleteUser(userId: number) {
         this.loading = true;
         this.error = null;
         try {
@@ -105,25 +108,25 @@ class UserStore {
     }
 
 
-    async loginUser(email: string, password: string,roles:Roles[]) {
+    async loginUser(email: string, password: string, roles: Roles[]) {
         this.loading = true;
         this.error = null;
         try {
-            const response = await axios.post(`${url}/Auth/login`, { email, password ,roles}, {
+            const response = await axios.post(`${url}/Auth/login`, { email, password, roles }, {
                 headers: { "Content-Type": "application/json" }
             });
             runInAction(() => {
                 this.user = response.data.user;
                 this.token = response.data.token;
                 this.loading = false;
-                console.log(response.data.user,response.data.token);
-                if(this.token){
+                console.log(response.data.user, response.data.token);
+                if (this.token) {
                     sessionStorage.setItem('token', this.token);
-                    sessionStorage.setItem('userId',this.user.id.toString()); 
+                    sessionStorage.setItem('userId', this.user.id.toString());
                     sessionStorage.setItem("loginTime", Date.now().toString());
                 }
             });
-        } catch (error : any) {
+        } catch (error: any) {
             runInAction(() => {
                 this.error = error.message || "Failed to login";
                 this.loading = false;
@@ -132,7 +135,7 @@ class UserStore {
     }
 
 
-    async getUserByEmail(email:string) {
+    async getUserByEmail(email: string) {
         this.loading = true;
         this.error = null;
         try {
@@ -141,7 +144,7 @@ class UserStore {
                 this.user = response.data;
                 this.loading = false;
             });
-        } catch (error:any) {
+        } catch (error: any) {
             runInAction(() => {
                 this.error = error.message || "Failed to get user by email";
                 this.loading = false;
@@ -149,7 +152,7 @@ class UserStore {
         }
     }
 
-    async updateName(id:number, name:string) {
+    async updateName(id: number, name: string) {
         this.loading = true;
         this.error = null;
         try {
@@ -160,7 +163,7 @@ class UserStore {
                 this.user.name = response.data.name;
                 this.loading = false;
             });
-        } catch (error:any) {
+        } catch (error: any) {
             runInAction(() => {
                 this.error = error.message || "Failed to update name";
                 this.loading = false;
@@ -168,7 +171,7 @@ class UserStore {
         }
     }
 
-    async updatePassword(id:number, password:string) {
+    async updatePassword(id: number, password: string) {
         this.loading = true;
         this.error = null;
         try {
@@ -178,7 +181,7 @@ class UserStore {
             runInAction(() => {
                 this.loading = false;
             });
-        } catch (error:any) {
+        } catch (error: any) {
             runInAction(() => {
                 this.error = error.message || "Failed to update password";
                 this.loading = false;
@@ -186,19 +189,19 @@ class UserStore {
         }
     }
 
-    async sendEmail(to:string, subject:string,body:string){
+    async sendEmail(to: string, subject: string, body: string) {
         this.loading = true;
         this.error = null;
         try {
-            console.log(to,subject,body);
-            
-             await axios.post(`${url}/Email/send`, { to, subject, body }, {
+            console.log(to, subject, body);
+
+            await axios.post(`${url}/Email/send`, { to, subject, body }, {
                 headers: { "Content-Type": "application/json" }
             });
             runInAction(() => {
                 this.loading = false;
             });
-        } catch (error:any) {
+        } catch (error: any) {
             runInAction(() => {
                 this.error = error.message || "Failed to send email";
                 this.loading = false;

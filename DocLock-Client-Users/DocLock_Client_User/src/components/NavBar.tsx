@@ -44,9 +44,51 @@ const NavBar = () => {
                 <MenuItem onClick={handleCloseNavMenu}>
                     <Button sx={{ color: "#FFFFFF" }} component={Link} to='/view-file'>view-file</Button>
                 </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+            <Button sx={{ color: "#FFFFFF" }} component={Link} to='/about'>About</Button>
+          </MenuItem>
+          <MenuItem onClick={handleCloseNavMenu}>
+            <Button sx={{ color: "#FFFFFF" }} component={Link} to='/'>Dashboard</Button>
+          </MenuItem>
             </Menu>
         </Box>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 2, justifyContent: 'center' }}>
+        <Button
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            "&:hover": {
+                backgroundColor: "#74ad7d",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='./about'
+    >
+        About
+    </Button>
+    <Button
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            "&:hover": {
+                backgroundColor: "#74ad7d",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='/'
+    >
+        Dashboard
+    </Button>
     <Button 
         sx={{
             color: "#FFFFFF",
@@ -103,6 +145,7 @@ const NavBar = () => {
     >
         View File
     </Button>
+   
 </Box>
     </>);
 };
