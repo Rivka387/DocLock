@@ -36,6 +36,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserActivityService, UserActivityService>();
 builder.Services.AddScoped<S3Service>();
 
+//Repository
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -52,14 +53,27 @@ builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
 builder.Services.AddScoped<IDataContext, DataContext>(); // רישום IDataContext
 
 
-builder.Services.AddDbContext<DataContext>(options =>
+builder.Services.AddDbContext<DocLock.Data.DataContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var conection = "Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=1234";
+    options.UseNpgsql(conection);
 });
 
 
 //builder.Services.AddSingleton<DataContext>();
 //
+
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()  // מאפשר לכל מקור לגשת
+               .AllowAnyMethod()  // מאפשר כל שיטה (GET, POST וכו')
+               .AllowAnyHeader(); // מאפשר כל כותרת
+    });
+});
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -119,6 +133,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 

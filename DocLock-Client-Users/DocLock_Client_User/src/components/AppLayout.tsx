@@ -1,68 +1,66 @@
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Outlet, useNavigate } from "react-router";
 import NavBar from "./NavBar";
-import logo from "../assets/‏‏logo.png";
-import { Outlet } from "react-router";
-
-export default function AppLayout() {
+import { Spa } from "@mui/icons-material";
+import logo from "../assets/loggo.png";
+import UserDetails from "./User pages/UserDetails";
+import React from "react";
+import userStore from "./User pages/userStore";
+export default function appLayout() {
+  const navigate = useNavigate();
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+};
+const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+};
   return (
     <>
-      <AppBar
-        sx={{
-          backgroundColor: '#ffffff', // Clean and minimal white background
-          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', // Light, subtle shadow for depth
-          padding: '10px 0', // Padding for a comfortable layout
-        }}
-      >
-        <Container maxWidth="xl">
-          <Toolbar
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '0 20px',
-            }}
-          >
-            {/* Logo */}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <img
-                src={logo}
-                alt="DocLock Logo"
-                style={{ height: "50px", marginRight: "20px" }}
-              />
-              <Typography
-                variant="h6"
-                sx={{
-                  fontFamily: 'Roboto, sans-serif', // Clean sans-serif font
-                  fontWeight: 600,
-                  color: '#333333', // Subtle dark grey text
-                  letterSpacing: '.1rem',
-                  textTransform: 'uppercase', // Slight uppercase for sophistication
-                }}
-              >
-                DocLock
-              </Typography>
+     <AppBar>
+
+<Container maxWidth="xl">
+        {/* <Toolbar disableGutters> */}
+        <Toolbar>
+        <img
+          src={logo}
+          alt="DocLock Logo"
+          style={{ height: "55px", marginRight: "5px" }}
+        />
+        <Typography variant="h5"  fontFamily="cursive"align="left"  marginLeft="10px" sx={{ flexGrow: 1 }}>
+         DocLock
+        </Typography>  
+       {userStore.getUserId()&& <NavBar /> }              
+            
+            <Box sx={{ flexGrow: 0, display:'flex',}}>
+                    
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={handleOpenUserMenu}>
+                                <UserDetails />
+                            </IconButton>
+                        </Tooltip>
+                        <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'right',}}
+                                keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right',}}
+                                open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
+                            <MenuItem onClick={handleCloseUserMenu}>
+                                <Typography onClick={() => {
+                                  userStore.logout();
+                                  navigate('/login');
+                                }}>Log Out</Typography>
+                            </MenuItem>
+                        </Menu>
+                    </Box>
+            
+        
+        
+    </Toolbar>
+</Container>
+</AppBar > 
+
+<Box component="div" sx={{ minHeight: 'calc(100vh - 64px - 200px)', paddingTop: '50px', overflowX: 'hidden', width: '100%' ,paddingBottom:'20px'}}>
+        <Outlet/>
             </Box>
-
-            {/* Navbar */}
-            <NavBar />
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      {/* Content Container */}
-      <Box
-        component="div"
-        sx={{
-          minHeight: 'calc(100vh - 64px)', // Ensure content adjusts to full height
-          paddingTop: '40px', // Spacing from top for content
-          paddingBottom: '20px', // Padding at the bottom
-          overflowX: 'hidden', // Prevent horizontal scroll
-          width: '100%',
-          backgroundColor: '#f4f6f9', // Light background color for a clean look
-        }}
-      >
-        <Outlet />
-      </Box>
-    </>
-  );
+                </>
+  )
 }

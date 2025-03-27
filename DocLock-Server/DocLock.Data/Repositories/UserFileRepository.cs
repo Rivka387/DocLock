@@ -63,6 +63,7 @@ namespace DocLock.Data.Repositories
         {
             return _dataContext._Files.ToList();
         }
+
         //PUT
         public async Task<bool> UpdateFileNameAsync(UserFile userFile)
         {
@@ -83,6 +84,7 @@ namespace DocLock.Data.Repositories
             }
 
         }
+
 
         public async Task<bool> UpdateEmailListAsync(int id, string email)
         {
@@ -119,7 +121,7 @@ namespace DocLock.Data.Repositories
                 return null;
             }
         }
-   
+
 
         //DELETE
         public async Task<bool> DeleteFileAsync(int id)
@@ -146,6 +148,6 @@ namespace DocLock.Data.Repositories
 
         }
 
-      
+
     }
 }

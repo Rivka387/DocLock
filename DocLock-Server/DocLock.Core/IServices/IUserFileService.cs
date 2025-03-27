@@ -30,9 +30,12 @@ namespace DocLock.Core.IServices
 
         public Task<SharingFileDto> SharingFileAsync(int id, string email);
         public Task<FileContentResult> GetDecryptFileAsync(SharingFileDto decryption);
+
         public Task<bool> UpdateFileNameAsync(int fileId, string newFileName);
 
         // DELETE
         public Task<bool> DeleteUserFileAsync(int id);
+
+
     }
 }

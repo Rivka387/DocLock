@@ -53,6 +53,7 @@ namespace DocLock_Server.Controllers
         }
         // GET api/<FileController>/5
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetFileByIdAsync(int id)
         {
@@ -62,6 +63,7 @@ namespace DocLock_Server.Controllers
 
             return Ok(file);
         }
+
         [HttpGet("filesShared/{email}")]
         public async Task<ActionResult> GetFileShareByEmailAsync(string email)
         {
@@ -92,6 +94,8 @@ namespace DocLock_Server.Controllers
                 return NotFound("File not found.");
             return Ok(res);
         }
+
+
         [HttpPost("IsFile/{id}")]
         public async Task<ActionResult> IsFileExistAsync(int id, [FromBody] string name)
         {
@@ -113,6 +117,8 @@ namespace DocLock_Server.Controllers
             return Ok(new { encryptedLink = result });
         }
 
+
+
         [HttpPost("decrypt-file")]
         public async Task<IActionResult> GetDecryptFileAsync([FromBody] SharingFileDto request)
         {
@@ -129,6 +135,7 @@ namespace DocLock_Server.Controllers
 
         }
 
+
         // PUT api/<FileController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFileNameAsync(int id, [FromBody] string newFileName)
@@ -139,6 +146,7 @@ namespace DocLock_Server.Controllers
 
             return Ok(result);
         }
+
 
         // DELETE api/<FileController>/5
         [HttpDelete("{id}")]
