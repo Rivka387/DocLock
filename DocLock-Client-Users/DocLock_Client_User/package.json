@@ -21,7 +21,9 @@
     "aws-sdk": "^2.1692.0",
     "axios": "^1.8.3",
     "electron": "^35.0.3",
+    "lucide-react": "^0.484.0",
     "mammoth": "^1.9.0",
+    "md5": "^2.3.0",
     "mobx": "^6.13.6",
     "mobx-react": "^9.2.0",
     "react": "^19.0.0",
@@ -36,6 +38,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/electron": "^1.4.38",
+    "@types/md5": "^2.3.5",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@types/recharts": "^1.8.29",

@@ -6,15 +6,29 @@ import { Roles } from '../../types/Roles';
 const url = "http://localhost:3000/api";
 
 class UserStore {
+    userProfileImage: string = "https://via.placeholder.com/150"; // תמונה ברירת מחדל
+    fallbackImage: string = "/assets/default-profile.png"; // Local fallback image
     user = {} as User;
-    token:string|null = sessionStorage.getItem('token');
-    loading:boolean = false;
-    error:string | null = null;
+    token: string | null = sessionStorage.getItem('token');
+    loading: boolean = false;
+    error: string | null = null;
+
+    getUserProfileImage() {
+        // Return fallback image if the placeholder URL fails
+        const img = new Image();
+        img.src = this.userProfileImage;
+        img.onerror = () => {
+            this.userProfileImage = this.fallbackImage;
+        };
+        return this.userProfileImage;
+    }
 
     constructor() {
         makeAutoObservable(this);
-        
+        // Ensure userProfileImage is initialized properly
+        this.userProfileImage = "https://via.placeholder.com/150";
     }
+
     getUserId() {
         return parseInt(sessionStorage.getItem('userId') as string);
     }
@@ -23,7 +37,7 @@ class UserStore {
         this.token = token;
         if (token) {
             sessionStorage.setItem("token", token); // שמירה לאחר התחברות
-            sessionStorage.setItem('userId',this.user.id.toString()); 
+            sessionStorage.setItem('userId', this.user.id.toString());
             sessionStorage.setItem("loginTime", Date.now().toString());
             this.fetchUser(parseInt(sessionStorage.getItem('userId') as string));
         } else {
@@ -33,11 +47,9 @@ class UserStore {
         }
     }
 
-
     logout() {
         this.setSessionStorage(null);
     }
-
 
     async fetchUser(userId: number) {
         this.loading = true;
@@ -56,7 +68,6 @@ class UserStore {
         }
     }
 
-
     async registerUser(user: Partial<User>, roles: Roles[]) {
         this.loading = true;
         this.error = null;
@@ -71,7 +82,7 @@ class UserStore {
                 console.log(this.user, this.token);
                 if (this.token) {
                     sessionStorage.setItem('token', this.token);
-                    sessionStorage.setItem('userId',this.user.id.toString()); 
+                    sessionStorage.setItem('userId', this.user.id.toString());
                     sessionStorage.setItem("loginTime", Date.now().toString());
                 }
                 const subject = "Welcome to DocLock!";
@@ -87,7 +98,6 @@ class UserStore {
             });
         }
     }
-
 
     async deleteUser(userId: number) {
         this.loading = true;
@@ -106,7 +116,6 @@ class UserStore {
             });
         }
     }
-
 
     async loginUser(email: string, password: string, roles: Roles[]) {
         this.loading = true;
@@ -133,7 +142,6 @@ class UserStore {
             });
         }
     }
-
 
     async getUserByEmail(email: string) {
         this.loading = true;

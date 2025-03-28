@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Button, TextField, Grid2 as Grid, Box, Alert,  } from '@mui/material';
+import { Button, TextField, Grid, Box, Alert, IconButton, InputAdornment } from '@mui/material';
 import { Link, useNavigate } from 'react-router';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import userStore from './userStore';
 import { Roles } from '../../types/Roles';
 import { observer } from 'mobx-react-lite';
@@ -11,6 +12,7 @@ const Login = observer(() => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const [alertInfo, setAlertInfo] = useState<{ severity: 'success' | 'error' | 'warning' | 'info', message: string } | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     const validateEmail = (email: string) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,13 +43,11 @@ const Login = observer(() => {
             }
 
             try {
-                // await dispatch(loginUser({ email, password })).unwrap();
                 userStore.loginUser(email, password, [Roles.User]).then(() => {
-                    
-                console.log(userStore.user.id, userStore.token);
-                navigate('/');
+                    console.log(userStore.user.id, userStore.token);
+                    navigate('/');
                 });
-                
+
                 setAlertInfo({ severity: 'success', message: 'Successfully logged in!' });
             } catch (error) {
                 setAlertInfo({ severity: 'error', message: 'Failed to login. Please check your credentials and try again.' });
@@ -59,7 +59,7 @@ const Login = observer(() => {
     };
 
     return (
-        <Box sx={{ maxWidth: 400, mx: 'auto', mt: 5 }}>
+        <Box sx={{ maxWidth: 400, mx: 'auto', mt: 5, p: 3, borderRadius: '8px', boxShadow: 2, backgroundColor: '#fff' }}>
             {alertInfo && (
                 <Alert severity={alertInfo.severity} onClose={() => setAlertInfo(null)} sx={{ mb: 2 }}>
                     {alertInfo.message}
@@ -67,20 +67,94 @@ const Login = observer(() => {
             )}
             <form onSubmit={handleLogin}>
                 <Grid container spacing={2}>
-                    <Grid size={12}>
-                        <TextField label="Email" inputRef={emailRef} fullWidth required />
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Email"
+                            inputRef={emailRef}
+                            fullWidth
+                            required
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#6fa8cb',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#70ab9f',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#74ad7d',
+                                    },
+                                },
+                            }}
+                        />
                     </Grid>
-                    <Grid size={12}>
-                        <TextField type="password" label="Password" inputRef={passwordRef} fullWidth required />
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Password"
+                            type={showPassword ? 'text' : 'password'}
+                            inputRef={passwordRef}
+                            fullWidth
+                            required
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#6fa8cb',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#70ab9f',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#74ad7d',
+                                    },
+                                },
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                     </Grid>
-                    <Grid size={12}>
-                        <Button type="submit" variant="contained" color="primary" fullWidth>
+                    <Grid item xs={12}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            sx={{
+                                backgroundColor: '#6fa8cb',
+                                '&:hover': {
+                                    backgroundColor: '#70ab9f',
+                                },
+                            }}
+                        >
                             Login
                         </Button>
                     </Grid>
                 </Grid>
             </form>
-            <Button type="button" component={Link} to='/register'> don't have an account? Sign up</Button>
+            <Button
+                type="button"
+                component={Link}
+                to="/register"
+                sx={{
+                    mt: 2,
+                    textAlign: 'center',
+                    color: '#70ab9f',
+                    '&:hover': {
+                        color: '#6fa8cb',
+                    },
+                }}
+            >
+                Don’t have an account? Sign up
+            </Button>
         </Box>
     );
 });
