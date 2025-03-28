@@ -12,7 +12,6 @@ namespace DocLock.Data
 {
     public class DataContext : DbContext, IDataContext
     {
-     
         public DbSet<User> _Users { get; set; }
         public DbSet<UserFile> _Files { get; set; }
         public DbSet<Role> _Roles { get; set; }
@@ -28,7 +27,6 @@ namespace DocLock.Data
             {
                 optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=postgresql123");
             }
-
             optionsBuilder.LogTo(m => Console.WriteLine(m));
             base.OnConfiguring(optionsBuilder);
         }
@@ -52,5 +50,4 @@ namespace DocLock.Data
             return await base.SaveChangesAsync();
         }
     }
-
 }

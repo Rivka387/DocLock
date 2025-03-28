@@ -23,7 +23,6 @@ namespace DocLock.Service.Services
 
     public class UserFileService : IUserFileService
     {
-
         private readonly IUserFileRepository _userFileRepository;
         private readonly S3Service _fileStorageService;
         private readonly IUserService _userService;
@@ -41,7 +40,6 @@ namespace DocLock.Service.Services
         }
 
 
-        //GET
         public async Task<IEnumerable<UserFileDto>> GetAllUserFilesAsync()
         {
             var res = await _userFileRepository.GetAllFilesAsync();
@@ -71,25 +69,22 @@ namespace DocLock.Service.Services
 
             if (userFile == null || userFile.FilePassword != decryption.Password)
             {
-                return null; 
+                return null;
             }
 
             string fileUrl = DecryptLinkOrPassword(userFile.EncryptedLink, _encryptionKey);
 
-            // הורדת הקובץ המוצפן מ-S3
             var encryptedFileBytes = await _fileStorageService.DownloadFileAsync(fileUrl);
             if (encryptedFileBytes == null)
             {
-                return null; 
+                return null;
             }
-
-            // פענוח הקובץ
             byte[] decryptedFile = DecryptFile(encryptedFileBytes, _encryptionKey);
-
             return new FileContentResult(decryptedFile, userFile.FileType)
             {
-                FileDownloadName = userFile.FileName + "." + userFile.FileType 
+                FileDownloadName = userFile.FileName + "." + userFile.FileType
 
+            };
         }
 
 
@@ -106,7 +101,6 @@ namespace DocLock.Service.Services
 
         }
 
-        //PUT
         public async Task<bool> UpdateFileNameAsync(int fileId, string newFileName)
         {
             var userFile = await _userFileRepository.GetFileByIdAsync(fileId);
@@ -136,7 +130,6 @@ namespace DocLock.Service.Services
         }
 
 
-        //POST
         public async Task<bool> IsFileNameExist(int id, string name)
         {
             return await _userFileRepository.IsFileNameExistsAsync(id, name);
@@ -174,25 +167,17 @@ namespace DocLock.Service.Services
                 Password = password
             };
         }
-
-
         public async Task<string> UploadFileAsync(IFormFile file, string fileName, string password, int userId, string type)
         {
             string fileType = type;
-            // הצפנת הקובץ
             byte[] encryptedData = EncryptFile(file, _encryptionKey, userId, fileName);
 
-            // העלאה ל-S3
-            // יצירת קישור ציבורי ל-S3
             string fileUrl = await _fileStorageService.UploadFileAsync(file, fileName, encryptedData);
             if (fileUrl == null)
             {
                 return null;
             }
-            // הצפנת הקישור
             string encryptedLink = EncryptLinkOrPassword(fileUrl, _encryptionKey);
-
-            // שמירה במסד הנתונים
             await _userFileRepository.AddFileAsync(new UserFile
             {
                 OwnerId = userId,
@@ -206,7 +191,6 @@ namespace DocLock.Service.Services
             return encryptedLink;
         }
 
-        //DELETE
         public async Task<bool> DeleteUserFileAsync(int id)
         {
             try
@@ -216,8 +200,7 @@ namespace DocLock.Service.Services
                 {
                     return false;
                 }
-                //הוצאת המפתח של הקובץ מהקישור
-                var fileKey = userFile.FileLink.Contains("s3.amazonaws.com") ?
+                 var fileKey = userFile.FileLink.Contains("s3.amazonaws.com") ?
                  userFile.FileLink.Split(new[] { ".s3.amazonaws.com/" }, StringSplitOptions.None).Last() :
                  userFile.FileLink;
 

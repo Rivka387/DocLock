@@ -10,15 +10,13 @@ using DocLock.Core.Entities;
 namespace DocLock.Core.IRepositories
 {
     public interface IUserFileRepository
-    {
-        //GET
+    {//GET
         public Task<List<UserFile>> GetAllFilesAsync();
         public Task<UserFile> GetFileByIdAsync(int id);
         public Task<UserFile> GetFileByNameAsync(string name);
         public Task<UserFile[]> GetUserFilesByUserIdAsync(int userId);
         public Task<bool> IsFileNameExistsAsync(int ownerId, string fileName);
         public Task<UserFile> GetFileByUrlAsync(string fileUrl);
-
         public Task<List<UserFile>> GetFileShareByEmail(string email);
         public Task<bool> CheckingIsAllowedEmailAsync(int id, string email);
 
@@ -33,7 +31,6 @@ namespace DocLock.Core.IRepositories
 
         //DELETE
         public Task<bool> DeleteFileAsync(int id);
-
 
     }
 }
