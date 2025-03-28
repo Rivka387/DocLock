@@ -53,7 +53,6 @@ namespace DocLock_Server.Controllers
         }
         // GET api/<FileController>/5
 
-
         [HttpGet("{id}")]
         public async Task<ActionResult> GetFileByIdAsync(int id)
         {
@@ -63,7 +62,6 @@ namespace DocLock_Server.Controllers
 
             return Ok(file);
         }
-
         [HttpGet("filesShared/{email}")]
         public async Task<ActionResult> GetFileShareByEmailAsync(string email)
         {
@@ -83,19 +81,21 @@ namespace DocLock_Server.Controllers
             return Ok(result);
         }
 
-        [HttpPost("CheckingIsAllowedView/{id}")]
-        public async Task<ActionResult> CheckingIsAllowedViewAsync(string email, [FromBody] SharingFileDto sharingFileDTO)
+        [HttpPost("CheckingIsAllowedView/{email}")]
+        public async Task<IActionResult> CheckingIsAllowedViewAsync(string email, [FromBody] SharingFileDto sharingFileDto)
         {
-            var res = await _userFileService.CheckingIsAllowedViewAsync(email, sharingFileDTO);
-            if (!res)
+            var isAllowed = await _userFileService.CheckingIsAllowedViewAsync(email, sharingFileDto);
+            if (!isAllowed)
                 return Unauthorized("Not allowed viewing");
-            var result = await _userFileService.GetDecryptFileAsync(sharingFileDTO);
+            var file = await _userFileService.GetUserFileByIdAsync(sharingFileDto.Id);
+            if (file == null)
+                return NotFound("File not found.");
+            sharingFileDto.Password = file.FilePassword;
+            var result = await _userFileService.GetDecryptFileAsync(sharingFileDto);
             if (result == null)
                 return NotFound("File not found.");
-            return Ok(res);
+            return File(result.FileContents, result.ContentType, result.FileDownloadName);
         }
-
-
         [HttpPost("IsFile/{id}")]
         public async Task<ActionResult> IsFileExistAsync(int id, [FromBody] string name)
         {
@@ -117,8 +117,6 @@ namespace DocLock_Server.Controllers
             return Ok(new { encryptedLink = result });
         }
 
-
-
         [HttpPost("decrypt-file")]
         public async Task<IActionResult> GetDecryptFileAsync([FromBody] SharingFileDto request)
         {
@@ -135,7 +133,6 @@ namespace DocLock_Server.Controllers
 
         }
 
-
         // PUT api/<FileController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFileNameAsync(int id, [FromBody] string newFileName)
@@ -146,7 +143,6 @@ namespace DocLock_Server.Controllers
 
             return Ok(result);
         }
-
 
         // DELETE api/<FileController>/5
         [HttpDelete("{id}")]

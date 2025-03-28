@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DocLock.Core.Entities
 {
@@ -25,8 +22,6 @@ namespace DocLock.Core.Entities
         [Required]
         public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
         public bool IsActive { get; set; } = true;
-
-        // public DateOnly CreatedAt { get; set; }
     }
 
 }

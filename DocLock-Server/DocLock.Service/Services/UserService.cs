@@ -86,8 +86,6 @@ namespace DocLock.Service.Services
 
             }
             return _mapper.Map<UserDto>(res);
-
-
         }
         //POST
 

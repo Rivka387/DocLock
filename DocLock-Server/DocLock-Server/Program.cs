@@ -47,8 +47,6 @@ builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
 
 
 
-
-
 //Data
 builder.Services.AddScoped<IDataContext, DataContext>(); // רישום IDataContext
 

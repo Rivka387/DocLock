@@ -14,6 +14,7 @@
 	  <PackageReference Include="Google.Apis.Gmail.v1" Version="1.68.0.3427" />
     <PackageReference Include="FluentAssertions" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
       <PrivateAssets>all</PrivateAssets>

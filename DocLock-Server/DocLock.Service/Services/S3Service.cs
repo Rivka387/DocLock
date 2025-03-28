@@ -7,12 +7,11 @@ using Amazon.S3.Model;
 using Amazon.S3;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using DocLock.Core.IServices;
 
 namespace DocLock.Service.Services
 {
     public class S3Service
-    {
+    {  
         private readonly IAmazonS3 _s3Client;
         private readonly string _encryptionKey;
         private readonly string _bucketName;
@@ -45,6 +44,8 @@ namespace DocLock.Service.Services
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
                 return null;
             }
         }
@@ -103,7 +104,6 @@ namespace DocLock.Service.Services
                 return memoryStream.ToArray();
             }
         }
-
 
     }
 }
