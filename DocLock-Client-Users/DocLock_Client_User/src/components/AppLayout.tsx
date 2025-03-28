@@ -32,25 +32,25 @@ const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         </Typography>  
        {userStore.getUserId()&& <NavBar /> }              
             
-            <Box sx={{ flexGrow: 0, display:'flex',}}>
+       <Box sx={{ flexGrow: 0, display:'flex',}}>
                     
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu}>
-                                <UserDetails />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'right',}}
-                                keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right',}}
-                                open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
-                            <MenuItem onClick={handleCloseUserMenu}>
-                                <Typography onClick={() => {
-                                  userStore.logout();
-                                  navigate('/login');
-                                }}>Log Out</Typography>
-                            </MenuItem>
-                        </Menu>
-                    </Box>
+                    <Tooltip title="Open settings">
+                        <IconButton onClick={handleOpenUserMenu}>
+                           <UserDetails />
+                        </IconButton>
+                    </Tooltip>
+                    <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right',}}
+                            keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right',}}
+                            open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                            <Typography onClick={() => {
+                              userStore.logout();
+                              navigate('/login');
+                            }}>Log Out</Typography>
+                        </MenuItem>
+                    </Menu>
+                </Box>
             
         
         

@@ -17,15 +17,18 @@ const UserDetails = observer(() => {
     const user: User =userStore.user
     
     function stringAvatar(name: string) {
-        if (name == undefined) {
+        if (!name || name.trim() === '') {
             name = ' ';
         }
         return {
             sx: {
-                bgcolor: "#FFFFFF",
-                color:"#ED3D48"
+                backgroundImage: "linear-gradient(135deg, #6fa8cb, #70ab9f)", // צבע הרקע של ה-Avatar
+                color: "#ffffff", // צבע הטקסט (האות)
+                "&:hover": {
+                    backgroundImage: "linear-gradient(135deg, #70ab9f,rgb(74, 130, 165))", // צבע רקע בעת ריחוף
+                },
             },
-            children: `${name.split(' ')[0][0]}`,
+            children: `${name.split(' ')[0][0]}`, // האות הראשונה של שם המשתמש
         };
     }
     
