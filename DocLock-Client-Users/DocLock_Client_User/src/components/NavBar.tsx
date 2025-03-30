@@ -53,14 +53,16 @@ const NavBar = () => {
             </Menu>
         </Box>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 2, justifyContent: 'center' }}>
-        <Button
+        {/* <Button
         sx={{
             color: "#FFFFFF",
-            borderRadius: "20px",
+            borderRadius: "10px",
             padding: "8px 16px",
             textTransform: "none",
             fontWeight: "bold",
             backgroundColor:"#6fa8cb",
+            mr: 2,
+
             "&:hover": {
                 backgroundColor: "#74ad7d",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
@@ -74,11 +76,13 @@ const NavBar = () => {
     <Button
         sx={{
             color: "#FFFFFF",
-            borderRadius: "20px",
+            borderRadius: "10px",
             padding: "8px 16px",
             textTransform: "none",
             fontWeight: "bold",
             backgroundColor:"#6fa8cb",
+            mr: 2,
+
             "&:hover": {
                 backgroundColor: "#74ad7d",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
@@ -92,7 +96,7 @@ const NavBar = () => {
     <Button 
         sx={{
             color: "#FFFFFF",
-            borderRadius: "20px",
+            borderRadius: "10px",
             padding: "8px 16px",
             textTransform: "none",
             fontWeight: "bold",
@@ -106,12 +110,12 @@ const NavBar = () => {
         component={Link}
         to='/upload'
     >
-        UPLOAD
+        Upload
     </Button>
     <Button
         sx={{
             color: "#FFFFFF",
-            borderRadius: "20px",
+            borderRadius: "10px",
             padding: "8px 16px",
             textTransform: "none",
             fontWeight: "bold",
@@ -130,11 +134,13 @@ const NavBar = () => {
     <Button
         sx={{
             color: "#FFFFFF",
-            borderRadius: "20px",
+            borderRadius: "10px",
             padding: "8px 16px",
             textTransform: "none",
             fontWeight: "bold",
             backgroundColor:"#6fa8cb",
+            mr: 2,
+
             "&:hover": {
                 backgroundColor: "#74ad7d",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
@@ -144,7 +150,7 @@ const NavBar = () => {
         to='/view-file'
     >
         View File
-    </Button>
+    </Button> */}
    
 </Box>
     </>);

@@ -1,0 +1,40 @@
+<div class="email-container">
+    <mat-card class="email-card">
+      <mat-card-title>Send Email</mat-card-title>
+      <br>
+      <mat-card-content>
+        <form [formGroup]="emailForm">
+          <mat-form-field appearance="outline">
+            <mat-label>To</mat-label>
+            <input matInput [value]="(user$ | async)?.email" disabled>
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Subject</mat-label>
+            <input matInput formControlName="subject" placeholder="Enter subject">
+            <mat-icon matSuffix>subject</mat-icon>
+            <mat-error *ngIf="emailForm.get('subject')?.invalid">Subject is required (min 3 chars)</mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Message</mat-label>
+            <textarea matInput formControlName="body" placeholder="Enter message"></textarea>
+            <mat-icon matSuffix>message</mat-icon>
+            <mat-error *ngIf="emailForm.get('body')?.invalid">Message must be at least 10 characters</mat-error>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" [disabled]="emailForm.invalid" (click)="sendEmail()">
+            <mat-icon>send</mat-icon> Send
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+    
+    <br>
+    
+    <button mat-raised-button color="primary" routerLink="/users" class="router-link">
+      <mat-icon>arrow_back</mat-icon> return to users list
+    </button>
+  </div>
+  

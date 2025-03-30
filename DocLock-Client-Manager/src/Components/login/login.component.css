@@ -1,0 +1,142 @@
+@import 'primeicons/primeicons.css';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Poppins", sans-serif, "Helvetica Neue", sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:root {
+  --primary-color: #faf9fd; /* צבע ראשי */
+  --text-color: #1A1B1F; /* צבע טקסט */
+  --error-color: #651419; /* צבע שגיאות */
+  --border-color: #759a99; /* צבע מסגרת */
+  --disabled-color: #cdcad6; /* צבע לכפתור מנוטרל */
+  --icon-color: #70ab9f; /* צבע אייקונים */
+  --input-focus-color: #FFD700; /* צבע מסגרת אינפוט בפוקוס */
+}
+
+#login-container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 40px;
+}
+
+.logo {
+  width: 250px;
+  height: 250px;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.sign-in-card {
+  width: 400px;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.sign-in-card:hover {
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field input {
+  padding: 12px !important;
+  border-radius: 8px;
+}
+
+mat-error {
+  color: var(--error-color);
+  font-size: 12px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  font-weight: bold;
+  background-color: var(--disabled-color);
+  color: black;
+  border-radius: 30px;
+  border: 1px solid transparent;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.submit-button:enabled {
+  background-color: var(--primary-color);
+  color: var(--icon-color);
+  border: 2px solid var(--disabled-color);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button:enabled:hover {
+  background-color: var(--icon-color);
+  color: white;
+  transform: scale(1.05);
+}
+
+.register-link {
+  margin-top: 15px;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: color 0.3s;
+}
+
+.register-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.welcome-container {
+  text-align: center;
+}
+
+.welcome-container h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.welcome-container h1:nth-child(1) {
+  color: #74ad7d;
+}
+
+.welcome-container h1:nth-child(2) {
+  color: #70ab9f;
+}
+
+.welcome-container h1:nth-child(3) {
+  color: #6fa8cb;
+}
+

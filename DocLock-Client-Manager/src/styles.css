@@ -1,0 +1,65 @@
+@import 'primeicons/primeicons.css';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif, "Helvetica Neue", sans-serif;
+  background-color: #f5f5f5;
+}
+
+:root {
+  --primary-color: #faf9fd;  /* צבע ראשי */
+  --text-color: #1A1B1F;      /* צבע טקסט */
+  --error-color: #651419;     /* צבע שגיאות */
+  --border-color: #759a99;    /* צבע מסגרת */
+  --disabled-color: #cdcad6;  /* צבע לכפתור מנוטרל */
+  --icon-color: #70ab9f;      /* צבע אייקונים ירוק */
+  --input-focus-color: #FFD700; /* צבע צהוב למסגרת אינפוט בפוקוס */
+}
+
+.mat-mdc-button, 
+.mat-mdc-raised-button, 
+.mat-mdc-fab {
+  background-color: var(--primary-color) !important;
+  /* color: white !important; */
+}
+
+.mat-mdc-card {
+  background-color: var(--primary-color) !important;
+  /* color: white !important; */
+}
+
+.custom-text {
+  color: var(--text-color);
+}
+
+.transparent-box {
+  background-color: var(--background-color);
+  border: 1px solid var(--text-color);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.mat-icon {
+  color: #70ab9f; /* הצבע הרצוי לאייקונים */
+}
+
+/* צבע מסגרת אינפוט בפוקוס */
+.mat-mdc-form-field.mat-focused .mdc-notched-outline {
+  border-color: var(--input-focus-color) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-text-field {
+  caret-color: var(--input-focus-color) !important;
+}
+
+app-users-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}

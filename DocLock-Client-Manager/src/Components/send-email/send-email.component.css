@@ -1,0 +1,106 @@
+.email-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f0f0f0; /* Light background for contrast */
+}
+
+.email-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+  background-color: #ffffff;
+  margin: 20px 0;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0a2939; /* Luxurious color */
+  text-align: center;
+}
+
+mat-card-content {
+  padding: 20px 0;
+}
+
+mat-form-field {
+  width: 100%;
+  margin: 15px 0;
+}
+
+mat-label {
+  font-size: 16px;
+  color: #333;
+}
+
+mat-input-element {
+  font-size: 14px;
+}
+
+mat-icon {
+  color: #70ab9f; /* Elegant icon color */
+}
+
+mat-error {
+  font-size: 12px;
+  color: #ff3d00; /* Error color */
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #70ab9f;
+  color: white;
+  border-radius: 10px;
+  font-weight: 500;
+  padding: 10px 15px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #6fa8cb; /* Smooth hover effect */
+}
+
+button mat-icon {
+  margin-right: 10px;
+}
+
+button[disabled] {
+  background-color: #b4d8d0;
+}
+
+mat-card-content form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Return to Users List button styling */
+button.router-link {
+  width: auto;
+  margin-top: 20px;
+  background-color: #74ad7d; /* Matching the elegant theme */
+  color:#70ab9f;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+button.router-link:hover {
+  background-color: #244d66; /* Smooth hover effect */
+}
+
+button.router-link mat-icon {
+  margin-right: 10px;
+}
+

@@ -1,7 +1,6 @@
-import { AppBar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
-import { Outlet, useNavigate } from "react-router";
+import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Link, Outlet, useNavigate } from "react-router";
 import NavBar from "./NavBar";
-import { Spa } from "@mui/icons-material";
 import logo from "../assets/loggo.png";
 import UserDetails from "./User pages/UserDetails";
 import React from "react";
@@ -30,8 +29,105 @@ const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         <Typography variant="h4"  fontFamily="cursive"align="left"  marginLeft="10px" sx={{ flexGrow: 1 }}>
         DocLock
         </Typography>  
+        <Button
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "10px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            mr: 2,
+
+            "&:hover": {
+                backgroundColor: "#70ab9f",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='/About'
+    >
+        About
+    </Button>
+    <Button
+        sx={{
+            color: "#FFFFFF",
+            borderRadius: "10px",
+            padding: "8px 16px",
+            textTransform: "none",
+            fontWeight: "bold",
+            backgroundColor:"#6fa8cb",
+            mr: 2,
+            "&:hover": {
+                backgroundColor: "#70ab9f",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            }
+        }}
+        component={Link}
+        to='/'
+    >
+        Dashboard
+    </Button>
+        <Button 
+            sx={{
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                padding: "8px 16px",
+                textTransform: "none",
+                fontWeight: "bold",
+                backgroundColor:"#6fa8cb",
+                mr: 2,
+                "&:hover": {
+                    backgroundColor: "#70ab9f", 
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                }
+            }}
+            component={Link}
+            to='/upload'
+        >
+            Upload
+        </Button>
+        <Button
+            sx={{
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                padding: "8px 16px",
+                textTransform: "none",
+                fontWeight: "bold",
+                backgroundColor:"#6fa8cb",
+                mr: 2,
+                "&:hover": {
+                    backgroundColor: "#70ab9f",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                }
+            }}
+            component={Link}
+            to='/filelist'
+        >
+            Filelist
+        </Button>
+        <Button
+            sx={{
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                padding: "8px 16px",
+                textTransform: "none",
+                fontWeight: "bold",
+                backgroundColor:"#6fa8cb",
+                mr: 2,
+    
+                "&:hover": {
+                    backgroundColor: "#70ab9f",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                }
+            }}
+            component={Link}
+            to='/view-file'
+        >
+            View File
+        </Button>
        {userStore.getUserId()&& <NavBar /> }              
-            
+   
        <Box sx={{ flexGrow: 0, display:'flex',}}>
                     
                     <Tooltip title="Open settings">
