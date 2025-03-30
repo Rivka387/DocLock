@@ -60,6 +60,7 @@ const Login = observer(() => {
     };
 
     return (
+        
         <Box sx={{ maxWidth: 400, mx: 'auto', mt: 5 }}>
             {alertInfo && (
                 <Alert severity={alertInfo.severity} onClose={() => setAlertInfo(null)} sx={{ mb: 2 }}>
@@ -81,7 +82,7 @@ const Login = observer(() => {
                     </Grid>
                 </Grid>
             </form>
-            <Button type="button" component={Link} to='/register'> don't have an account? Sign up</Button>
+
         </Box>
     );
 });

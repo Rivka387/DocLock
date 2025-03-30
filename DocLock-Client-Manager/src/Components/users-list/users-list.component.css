@@ -1,0 +1,133 @@
+:host {
+    background-color: #0a2939cd; 
+    color: #70ab9f; 
+}
+
+:host ::ng-deep .p-dialog-mask {
+    background-color: rgba(0, 0, 0, 0.975) !important; 
+}
+
+:host ::ng-deep .p-dialog {
+    
+    background-color: #2a2a2a !important; 
+    width: 600px !important;
+    height: 300px !important;
+    padding: 30px !important;
+    border-radius: 12px !important;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.p-dialog-header {
+    background-color: #6fa8cb; 
+    color: white;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2rem;
+}
+
+.p-dialog-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.p-button-secondary {
+    background-color: #3a3a3a;
+    border-radius: 5px;
+    color: #70ab9f;
+}
+
+.p-button-success, .p-button-danger {
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.p-button-success {
+    background-color: #70ab9f; 
+}
+
+.p-button-success:hover {
+    background-color: #74ad7d;
+}
+
+.p-button-danger {
+    background-color: #ff6f61; 
+}
+
+.p-button-danger:hover {
+    background-color: #6fa8cb; 
+}
+
+.user-table-container {
+    margin: 30px auto;
+    width: 100%;
+    max-width: 1200px; 
+    background-color: #00000077; 
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.odd-row {
+    background-color: #0a2939cd; 
+ ;
+}
+
+.even-row {
+    background-color: #0a2939cd; 
+}
+
+.title {
+    color: #77b1a6; 
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px;
+}
+
+.col {
+    margin: 15px;
+    padding: 20px;
+}
+
+.icon-button {
+    background-color: transparent;
+    border: 1px solid #70ab9f; 
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: #6fa8cb; 
+    font-size: 22px;
+    margin: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.icon-button:hover {
+    background-color: #74ad7d; 
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); 
+    color: white;
+}
+
+.user-card {
+    border-radius: 8px;
+    padding: 12px;
+    text-shadow: #6fa8cb 1px 1px 2px;
+    color: white;
+    display: inline-block;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.user-card:hover {
+    background-color:#6fa8cb7e;
+}
+
+.arrow-icon {
+    font-size: 1.6rem;
+    margin-right: 10px;
+}

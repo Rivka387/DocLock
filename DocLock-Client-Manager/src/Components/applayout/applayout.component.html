@@ -1,0 +1,21 @@
+<mat-toolbar color="border-color" class="app-bar">
+  <span class="site-icon">
+<img src="..\\public\logo.png" alt="logo" class="logo">
+    <span class="site-name">DocLock Managment</span>
+  </span>
+  <span class="spacer"></span>
+  <mat-nav-list class="nav-links">
+    <a mat-button routerLink="/users"> Users List</a>
+    <a mat-button routerLink="">About</a>
+    <a mat-button routerLink="/dashboard">Dashboard</a>
+  </mat-nav-list>
+  <span class="spacer"></span>
+  <div class="user-section">
+    <mat-icon>logout</mat-icon>
+    <button mat-button (click)="logout()">Logout</button>
+  </div>
+</mat-toolbar>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

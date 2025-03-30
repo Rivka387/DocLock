@@ -1,0 +1,56 @@
+<div class="user-table-container">
+    <p-table [value]="users" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="5">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="title" pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="name" class="title">Name <p-sortIcon field="name"></p-sortIcon></th>
+                <th class="title">Email</th>
+                <th class="title">Status</th>
+                <th class="title">Send Email</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+            <tr [ngClass]="{ 'even-row': rowIndex % 2 === 0, 'odd-row': rowIndex % 2 !== 0 }">
+                <td class="col">{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <button pButton icon="pi pi-ban" class="icon-button p-button-rounded"
+                        *ngIf="!user.isActive" (click)="openConfirmationDialog(user.id, 'unblock')"></button>
+                    <button pButton icon="pi pi-check-circle" class="icon-button p-button-rounded"
+                        *ngIf="user.isActive" (click)="openConfirmationDialog(user.id, 'block')"></button>
+                </td>
+                <td>
+                    <button pButton icon="pi pi-envelope" class="icon-button p-button-rounded p-button-primary"
+                        (click)="sendEmail(user.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <a routerLink="/" class="user-card">
+        <mat-icon class="arrow-icon">arrow_back</mat-icon>
+    </a>
+</div>
+
+<p-dialog header="Verify action" [(visible)]="displayDialog" [modal]="true" [style]="{width: '500px'}">
+    <div class="dialog-content">
+        <i class="pi" [ngClass]="actionType === 'block' ? 'pi-lock' : 'pi-unlock'"
+            [style.color]="actionType === 'block' ? 'red' : 'green'"
+            style="font-size: 3rem; display: block; text-align: center; margin-bottom: 10px;"></i>
+        <h3 style="text-align: center; color: #444;">
+            Are you sure you want to <span [style.color]="actionType === 'block' ? 'red' : 'green'">{{ actionType }}</span> this user?
+        </h3>
+        <p style="text-align: center; font-size: 0.9rem; color: gray;">This action can be reversed later.</p>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancel" icon="pi pi-times" class="p-button-secondary"
+            (click)="displayDialog=false"></button>
+        <button pButton label="Confirm" icon="pi pi-check"
+            [ngClass]="actionType === 'block' ? 'p-button-danger' : 'p-button-success'" (click)="confirmAction()"
+            [style]="{marginLeft: '10px'}">
+        </button>
+    </ng-template>
+</p-dialog>
