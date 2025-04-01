@@ -5,17 +5,19 @@ import { router } from './router'
 import { RouterProvider } from 'react-router'
 import { ThemeProvider } from '@emotion/react'
 import theme from './Them'
-
+import EmailIcon from './EmailIcon'
+import Footer from './Footer'
 function App() {
 
   return (
     <>
-
+    <EmailIcon/>
       <h1></h1>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
+
       </ThemeProvider>
 
       

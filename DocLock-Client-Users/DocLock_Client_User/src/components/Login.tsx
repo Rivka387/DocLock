@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router';
 import { Roles } from '../types/Roles';
 import { observer } from 'mobx-react-lite';
 import userStore from './User pages/userStore';
+import Footer from '../Footer';
 
 const Login = observer(() => {
 
@@ -60,7 +61,7 @@ const Login = observer(() => {
     };
 
     return (
-        
+        <>
         <Box sx={{ maxWidth: 400, mx: 'auto', mt: 5 }}>
             {alertInfo && (
                 <Alert severity={alertInfo.severity} onClose={() => setAlertInfo(null)} sx={{ mb: 2 }}>
@@ -84,6 +85,8 @@ const Login = observer(() => {
             </form>
 
         </Box>
+                    </>
+
     );
 });
 
