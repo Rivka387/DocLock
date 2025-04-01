@@ -5,6 +5,7 @@ import logo from "../assets/loggo.png";
 import UserDetails from "./User pages/UserDetails";
 import React from "react";
 import userStore from "./User pages/userStore";
+import Footer from "../Footer";
 export default function appLayout() {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -157,6 +158,8 @@ const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
 <Box component="div" sx={{ minHeight: 'calc(100vh - 64px - 200px)', paddingTop: '50px', overflowX: 'hidden', width: '100%' ,paddingBottom:'20px'}}>
         <Outlet/>
             </Box>
+            <Footer/>
+
                 </>
   )
 }

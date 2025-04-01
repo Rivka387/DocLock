@@ -10,3 +10,27 @@
     filter: blur(10px);
   }
 }
+.email-icon {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #6fa8cb;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  border: none;
+}
+
+.email-icon:hover {
+  background-color: #70ab9f;
+  transform: scale(1.1);
+}
+
