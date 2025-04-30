@@ -12,8 +12,26 @@ class FileStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
+    this.setupInterceptor();
 
+  }
+  
+  private setupInterceptor() {
+    axios.interceptors.request.use((config) => {
+      const token = sessionStorage.getItem('token');
+      if (!config.headers["Content-Type"]){
+        config.headers.set("Content-Type", "application/json") ;
+      }
+      if (token) {
+        config.headers.set("Authorization", `Bearer ${token}`);
+      }
+      console.log(config.headers);  
+      
+      return config;
+    }, (error) => {
+      return Promise.reject(error);
+    });
+  }
 
 
   async fetchFiles() {

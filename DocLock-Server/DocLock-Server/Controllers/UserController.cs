@@ -26,8 +26,8 @@ namespace DocLock_Server.Controllers
         [HttpGet("admin-only")]
 
         [HttpGet]
-
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsersAsync()
         {
             return Ok(await _userService.GetAllUsersAsync());
 
@@ -35,6 +35,7 @@ namespace DocLock_Server.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "UserOrAdmin")]
         public async Task<ActionResult<UserDto>> GetUserByIdAsync(int id)
         {
             if (id < 0)
@@ -48,6 +49,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpGet("email")]
+        [Authorize(Policy = "UserOrAdmin")]
         public async Task<ActionResult<UserDto>> GetUserByEmailAsync([FromBody] string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -67,8 +69,9 @@ namespace DocLock_Server.Controllers
 
 
         // PUT api/<UserController>/5
-        [HttpPut("/name/{id}")]
-            public async Task<ActionResult<bool>> UpdateNameAsync(int id, [FromBody] string value)
+        [HttpPut("name/{id}")]
+        [Authorize(Policy = "UserOnly")]
+        public async Task<ActionResult<bool>> UpdateNameAsync(int id, [FromBody] string value)
             {
                 if (string.IsNullOrEmpty(value))
                 {
@@ -86,7 +89,8 @@ namespace DocLock_Server.Controllers
             }
 
 
-        [HttpPut("/password/{id}")]
+        [HttpPut("password/{id}")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<ActionResult<bool>> UpdatePasswordAsync(int id, [FromBody] string password)
         {
             if (string.IsNullOrEmpty(password) || password.Length < 6)
@@ -104,7 +108,8 @@ namespace DocLock_Server.Controllers
             return Ok(res);  
         }
 
-        [HttpPut("/enable/{id}")]
+        [HttpPut("enable/{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<bool>> EnableUserAsync(int id)
         {
             var res = await _userService.EnableUserAsync(id);
@@ -113,7 +118,8 @@ namespace DocLock_Server.Controllers
             return Ok(res);
         }
 
-        [HttpPut("/disable/{id}")]
+        [HttpPut("disable/{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<bool>> DisableUserAsync(int id)
         {
             var res = await _userService.DisableUserAsync(id);
@@ -124,8 +130,8 @@ namespace DocLock_Server.Controllers
 
         // DELETE api/<UserController>/5
 
-        [Authorize(Policy = "EditorOrAdmin")]
-        [HttpDelete("/{id}")]
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<ActionResult> DeleteUserAsync(int id)
         {
             var res =await _userService.DeleteUserAsync(id);
