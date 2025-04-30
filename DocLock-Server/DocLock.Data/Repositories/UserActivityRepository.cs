@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DocLock.Core.DTOS;
+using DocLock.Core.Entities;
 using DocLock.Core.IRepositories;
 using Microsoft.EntityFrameworkCore;
 

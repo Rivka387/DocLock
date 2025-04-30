@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router';
 import { Roles } from '../types/Roles';
 import { observer } from 'mobx-react-lite';
 import userStore from './User pages/userStore';
-import Footer from '../Footer';
 
 const Login = observer(() => {
 

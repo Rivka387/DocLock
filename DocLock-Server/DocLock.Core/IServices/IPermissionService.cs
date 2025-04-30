@@ -7,6 +7,7 @@ using AutoMapper;
 using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
 
+
 namespace DocLock.Core.IServices
 {
     public interface IPermissionService

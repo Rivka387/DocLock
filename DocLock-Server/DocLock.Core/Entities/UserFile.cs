@@ -44,8 +44,9 @@ namespace DocLock.Core.Entities
 
         [Required]
         public string FileType { get; set; }
+        public string ContentType { get; set; } 
 
-        //emails alloew to see th file
+        //emails alloew to see the file
         public ICollection<string> EmailAloowed { get; set; } = new List<string>();
     }
 }

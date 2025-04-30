@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using DocLock.Core.DTOS;
 using DocLock.Core.Entities;
 using DocLock.Core.IRepositories;
 using DocLock.Core.IServices;
-using DocLock.Core.Repositories;
-
-using Amazon.S3;
-using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;
@@ -169,7 +162,7 @@ namespace DocLock.Service.Services
         }
         public async Task<string> UploadFileAsync(IFormFile file, string fileName, string password, int userId, string type)
         {
-            string fileType = type;
+            string fileType = file.ContentType;
             byte[] encryptedData = EncryptFile(file, _encryptionKey, userId, fileName);
 
             string fileUrl = await _fileStorageService.UploadFileAsync(file, fileName, encryptedData);

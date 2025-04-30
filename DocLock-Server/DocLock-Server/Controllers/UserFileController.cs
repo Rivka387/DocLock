@@ -5,6 +5,7 @@ using DocLock.Core.Entities;
 using DocLock.Core.IRepositories;
 using DocLock.Core.IServices;
 using DocLock.Data.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,10 +18,9 @@ namespace DocLock_Server.Controllers
     {
         private readonly IUserFileService _userFileService;
         readonly IMapper _mapper;
-        public UserFileController(IUserFileRepository userFileRepository, IUserFileService userFileService, IMapper mapper)
+        public UserFileController( IUserFileService userFileService)
         {
             _userFileService = userFileService;
-            _mapper = mapper;
 
         }
 
@@ -31,6 +31,7 @@ namespace DocLock_Server.Controllers
 
         // GET: api/<FileController>
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetAllUserFilesAsync()
         {
             var files = await _userFileService.GetAllUserFilesAsync();
@@ -39,6 +40,7 @@ namespace DocLock_Server.Controllers
 
         // GET api/<FileController>/5
         [HttpGet("user/{id}")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<ActionResult<UserFileDto[]>> GetUserFilesByUserIdAsync(int id)
         {
 
@@ -54,6 +56,7 @@ namespace DocLock_Server.Controllers
         // GET api/<FileController>/5
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "UserOrAdmin")]
         public async Task<ActionResult> GetFileByIdAsync(int id)
         {
             var file = await _userFileService.GetUserFileByIdAsync(id);
@@ -63,6 +66,7 @@ namespace DocLock_Server.Controllers
             return Ok(file);
         }
         [HttpGet("filesShared/{email}")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<ActionResult> GetFileShareByEmailAsync(string email)
         {
             var file = await _userFileService.GetFileShareByEmail(email);
@@ -73,6 +77,7 @@ namespace DocLock_Server.Controllers
 
         // POST api/<FileController>
         [HttpPost("Sharing/{id}")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<ActionResult> SharingFileAsync(int id, [FromBody] string email)
         {
             var result = await _userFileService.SharingFileAsync(id, email);
@@ -82,11 +87,9 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpPost("CheckingIsAllowedView/{email}")]
+        [Authorize(Policy = "UserOrAdmin")]
         public async Task<IActionResult> CheckingIsAllowedViewAsync(string email, [FromBody] SharingFileDto sharingFileDto)
         {
-            var isAllowed = await _userFileService.CheckingIsAllowedViewAsync(email, sharingFileDto);
-            if (!isAllowed)
-                return Unauthorized("Not allowed viewing");
             var file = await _userFileService.GetUserFileByIdAsync(sharingFileDto.Id);
             if (file == null)
                 return NotFound("File not found.");
@@ -96,7 +99,9 @@ namespace DocLock_Server.Controllers
                 return NotFound("File not found.");
             return File(result.FileContents, result.ContentType, result.FileDownloadName);
         }
+        //Post
         [HttpPost("IsFile/{id}")]
+        [Authorize(Policy = "UserOrAdmin")]
         public async Task<ActionResult> IsFileExistAsync(int id, [FromBody] string name)
         {
             var result = await _userFileService.IsFileNameExists(id, name);
@@ -107,6 +112,7 @@ namespace DocLock_Server.Controllers
 
         [HttpPost("upload/{id}")]
         [Consumes("multipart/form-data")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> UploadFileAsync(int id, [FromForm] UploadFileRequestDto request)
         {
             if (request.File == null || request.File.Length == 0)
@@ -118,6 +124,7 @@ namespace DocLock_Server.Controllers
         }
 
         [HttpPost("decrypt-file")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> GetDecryptFileAsync([FromBody] SharingFileDto request)
         {
             var result = await _userFileService.GetDecryptFileAsync(request);
@@ -135,6 +142,7 @@ namespace DocLock_Server.Controllers
 
         // PUT api/<FileController>/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> UpdateFileNameAsync(int id, [FromBody] string newFileName)
         {
             var result = await _userFileService.UpdateFileNameAsync(id, newFileName);
@@ -144,8 +152,9 @@ namespace DocLock_Server.Controllers
             return Ok(result);
         }
 
-        // DELETE api/<FileController>/5
+        // DELETE 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "UserOrAdmin")]
         public async Task<IActionResult> DeleteFileAsync(int id)
         {
             var result = await _userFileService.DeleteUserFileAsync(id);

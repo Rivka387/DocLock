@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DocLock.Core.DTOS
 {
+
     public class PermissionDto
     {
         public int Id { get; set; }
@@ -14,4 +15,5 @@ namespace DocLock.Core.DTOS
 
         public string Description { get; set; }
     }
+
 }

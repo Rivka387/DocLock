@@ -48,6 +48,8 @@ builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
 
 
 //Data
+//var connectionString = builder.Configuration["DB_CONNECTION_STRING"];
+
 builder.Services.AddScoped<IDataContext, DataContext>(); // רישום IDataContext
 
 
@@ -55,6 +57,7 @@ builder.Services.AddDbContext<DocLock.Data.DataContext>(options =>
 {
     var conection = "Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=1234";
     options.UseNpgsql(conection);
+    //options.UseNpgsql(connectionString);
 });
 
 
@@ -105,7 +108,7 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidAudience = builder.Configuration["JWT:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:KEY"]))
         };
     });
 
@@ -113,8 +116,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
-    options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
+    options.AddPolicy("UserOrAdmin", policy => policy.RequireRole("User", "Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 });
 
 
