@@ -1,0 +1,10 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+services:
+  doclockserverapi:
+    image: doclockserverapi
+    build:
+      context: .
+      dockerfile: DocLock-Server/Dockerfile
+    ports:
+      - 3000:3000

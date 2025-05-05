@@ -221,7 +221,7 @@ namespace DocLock.Service.Services
 
                 using (var aes = Aes.Create())
                 {
-                    aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); // Ensures 32-byte key
+                    aes.Key = Encoding.UTF8.GetBytes(key.PadRight(32).Substring(0, 32)); // Ensures 32-byte key
                     aes.IV = new byte[16];
 
                     using (var encryptor = aes.CreateEncryptor())
@@ -238,7 +238,7 @@ namespace DocLock.Service.Services
             byte[] dataBytes = Encoding.UTF8.GetBytes(data);
             using (var aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); // Ensures 32-byte key
+                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(32).Substring(0, 32)); // Ensures 32-byte key
                 aes.IV = new byte[16];
 
                 using (var encryptor = aes.CreateEncryptor())
@@ -256,7 +256,7 @@ namespace DocLock.Service.Services
 
             using (var aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); // Ensures 32-byte key
+                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(32).Substring(0, 32)); // Ensures 32-byte key
                 aes.IV = new byte[16]; 
                 using (var decryptor = aes.CreateDecryptor())
                 {
@@ -271,7 +271,7 @@ namespace DocLock.Service.Services
         {
             using (var aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(24).Substring(0, 24)); 
+                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(32).Substring(0, 32)); 
                 aes.IV = new byte[16];
 
                 using (var decryptor = aes.CreateDecryptor())
