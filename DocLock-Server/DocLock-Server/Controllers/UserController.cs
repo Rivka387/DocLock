@@ -22,7 +22,6 @@ namespace DocLock_Server.Controllers
             _userService = userService;
         }
 
-        // GET: api/<UserController>
         [HttpGet("admin-only")]
 
         [HttpGet]
@@ -33,7 +32,6 @@ namespace DocLock_Server.Controllers
 
         }
 
-        // GET api/<UserController>/5
         [HttpGet("{id}")]
         [Authorize(Policy = "UserOrAdmin")]
         public async Task<ActionResult<UserDto>> GetUserByIdAsync(int id)
@@ -68,7 +66,6 @@ namespace DocLock_Server.Controllers
 
 
 
-        // PUT api/<UserController>/5
         [HttpPut("name/{id}")]
         [Authorize(Policy = "UserOnly")]
         public async Task<ActionResult<bool>> UpdateNameAsync(int id, [FromBody] string value)
@@ -128,7 +125,6 @@ namespace DocLock_Server.Controllers
             return Ok(res);
         }
 
-        // DELETE api/<UserController>/5
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "UserOnly")]
