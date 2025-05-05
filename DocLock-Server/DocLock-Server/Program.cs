@@ -55,8 +55,9 @@ builder.Services.AddScoped<IDataContext, DataContext>(); // רישום IDataContext
 
 builder.Services.AddDbContext<DocLock.Data.DataContext>(options =>
 {
-    var conection = "Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=1234";
-    options.UseNpgsql(conection);
+    //var conection = "Host=localhost;Port=5432;Database=DocLock;Username=postgres;Password=1234";
+    var connection = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+    options.UseNpgsql(connection);
     //options.UseNpgsql(connectionString);
 });
 
