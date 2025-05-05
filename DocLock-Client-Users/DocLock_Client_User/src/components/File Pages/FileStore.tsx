@@ -191,7 +191,9 @@ if(userStore.user.id == null){
         this.error = null;
         this.loading = false;
         console.log(response.data);
-        userStore.sendEmail(email, "File Shared", `${file.name} shared with you\npassword: ${response.data.password}`);
+        userStore.sendEmail(email, `DocLock ${userStore.user.name} Shared File with you`, `${userStore.user.name} shared with you the File : ${file.name} \nThe encrypted password is:\n ${response.data.password}`);
+
+        // userStore.sendEmail(email, "File Shared", `${file.name} shared with you\npassword: ${response.data.password}`);
         
       });
 
