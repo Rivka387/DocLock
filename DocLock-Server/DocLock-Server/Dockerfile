@@ -26,7 +26,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 
 # Expose the port used by Render
-EXPOSE $PORT
+EXPOSE 8080
+
+# Configure ASP.NET Core to listen on all network interfaces (0.0.0.0) and the exposed port
 ENV ASPNETCORE_URLS=http://0.0.0.0:$PORT
 
 FROM base AS final

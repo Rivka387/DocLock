@@ -121,8 +121,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 });
 
+builder.WebHost.UseUrls(Environment.GetEnvironmentVariable("ASPNETCORE_URLS") ?? "http://0.0.0.0:8080");
 
-builder.WebHost.UseUrls("http://localhost:3000");
+//builder.WebHost.UseUrls("http://localhost:3000");
 
 var app = builder.Build();
 
