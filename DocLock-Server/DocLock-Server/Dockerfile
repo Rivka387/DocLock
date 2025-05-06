@@ -29,7 +29,7 @@ WORKDIR /app
 EXPOSE 8080
 
 # Configure ASP.NET Core to listen on all network interfaces (0.0.0.0) and the exposed port
-ENV ASPNETCORE_URLS=http://0.0.0.0:$PORT
+ENV ASPNETCORE_URLS=http://0.0.0.0:$DEFAULT_PORT
 
 FROM base AS final
 WORKDIR /app
