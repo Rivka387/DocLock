@@ -9,7 +9,7 @@ COPY ["DocLock.Data/DocLock.Data.csproj", "DocLock.Data/"]
 COPY ["DocLock.Service/DocLock.Service.csproj", "DocLock.Service/"]
 
 # Restore dependencies
-RUN dotnet restore "DocLock-Server.API/DocLock-Server.API.csproj"
+RUN dotnet restore "DocLock-Server/DocLock-Server.API.csproj"
 
 # Copy the remaining files
 COPY . . 
