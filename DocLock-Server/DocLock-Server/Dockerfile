@@ -3,7 +3,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Copy project files
-COPY ["DocLock-Server.API/DocLock-Server.API.csproj", "DocLock-Server.API/"]
+COPY ["DocLock-Server/DocLock-Server.API.csproj", "DocLock-Server/"]
 COPY ["DocLock.Core/DocLock.Core.csproj", "DocLock.Core/"]
 COPY ["DocLock.Data/DocLock.Data.csproj", "DocLock.Data/"]
 COPY ["DocLock.Service/DocLock.Service.csproj", "DocLock.Service/"]
@@ -15,7 +15,7 @@ RUN dotnet restore "DocLock-Server.API/DocLock-Server.API.csproj"
 COPY . . 
 
 # Build the application
-WORKDIR "/src/DocLock-Server.API"
+WORKDIR "/src/DocLock-Server"
 RUN dotnet build "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
@@ -36,4 +36,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Define entrypoint
-ENTRYPOINT ["dotnet", "DocLock-Server.API.dll"]
+ENTRYPOINT ["dotnet", "DocLock-Server.dll"]
