@@ -20,7 +20,7 @@ RUN dotnet build "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/bui
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "DocLock-Server/DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
@@ -29,7 +29,7 @@ WORKDIR /app
 EXPOSE 8080
 
 # Configure ASP.NET Core to listen on all network interfaces (0.0.0.0) and the exposed port
-ENV ASPNETCORE_URLS=http://0.0.0.0:$DEFAULT_PORT
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 
 FROM base AS final
 WORKDIR /app
