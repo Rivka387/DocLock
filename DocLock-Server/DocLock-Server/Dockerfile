@@ -2,11 +2,11 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Copy project files
-COPY ["DocLock-Server.API.csproj", "DocLock-Server/"]
-COPY ["../DocLock.Core/DocLock.Core.csproj", "DocLock.Core/"]
-COPY ["../DocLock.Data/DocLock.Data.csproj", "DocLock.Data/"]
-COPY ["../DocLock.Service/DocLock.Service.csproj", "DocLock.Service/"]
+# Copy project files with corrected paths
+COPY ["DocLock-Server/DocLock-Server.API.csproj", "DocLock-Server/"]
+COPY ["DocLock.Core/DocLock.Core.csproj", "DocLock.Core/"]
+COPY ["DocLock.Data/DocLock.Data.csproj", "DocLock.Data/"]
+COPY ["DocLock.Service/DocLock.Service.csproj", "DocLock.Service/"]
 
 # Restore dependencies
 RUN dotnet restore "DocLock-Server/DocLock-Server.API.csproj"
