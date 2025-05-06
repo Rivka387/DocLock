@@ -12,7 +12,7 @@ COPY ["../DocLock.Service/DocLock.Service.csproj", "DocLock.Service/"]
 RUN dotnet restore "DocLock-Server/DocLock-Server.API.csproj"
 
 # Copy the remaining files
-COPY .. .  
+COPY . .
 
 # Build the application
 WORKDIR "/src/DocLock-Server"
