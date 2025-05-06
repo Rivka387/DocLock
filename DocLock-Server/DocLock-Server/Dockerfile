@@ -3,24 +3,24 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Copy project files
-COPY ["DocLock.API/DocLock-Server.API.csproj", "DocLock-Server.API/"]
+COPY ["DocLock-Server.API/DocLock-Server.API.csproj", "DocLock-Server.API/"]
 COPY ["DocLock.Core/DocLock.Core.csproj", "DocLock.Core/"]
 COPY ["DocLock.Data/DocLock.Data.csproj", "DocLock.Data/"]
 COPY ["DocLock.Service/DocLock.Service.csproj", "DocLock.Service/"]
 
 # Restore dependencies
-RUN dotnet restore "./DocLock-Server.API/DocLock-Server.API.csproj"
+RUN dotnet restore "DocLock-Server.API/DocLock-Server.API.csproj"
 
 # Copy the remaining files
 COPY . . 
 
 # Build the application
 WORKDIR "/src/DocLock-Server.API"
-RUN dotnet build "./DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
