@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, TextField, Card, CardContent, Typography, Box, Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Button, TextField, Card, CardContent, Typography, Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { CloudUpload, Description, Cancel } from "@mui/icons-material";
 import fileStore from "./FileStore";
 
