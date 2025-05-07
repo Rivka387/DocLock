@@ -8,7 +8,9 @@ class FileStore {
   fileShare: UserFile[] = [];
   loading: boolean = false;
   error: string | null = null;
-  url: string = `${process.env.REACT_APP_API_URL}/api/UserFile1`;
+  url: string = `${import.meta.env.API_URL}/api/UserFile`;
+
+  // url: string = "http://localhost:3000/api/UserFile";
 
   constructor() {
     makeAutoObservable(this);
