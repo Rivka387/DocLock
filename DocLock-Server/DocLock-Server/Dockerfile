@@ -20,7 +20,8 @@ RUN dotnet build "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/bui
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "DocLock-Server/DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+WORKDIR /src/DocLock-Server
+RUN dotnet publish "DocLock-Server.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app

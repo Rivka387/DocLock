@@ -5,7 +5,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import userStore from './userStore';
 import { Roles } from '../../types/Roles';
 import { observer } from 'mobx-react-lite';
-import Footer from '../../Footer';
 
 const Login = observer(() => {
 

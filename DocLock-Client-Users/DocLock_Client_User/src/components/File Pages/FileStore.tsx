@@ -35,7 +35,6 @@ class FileStore {
     });
   }
 
-
   async fetchFiles() {
     try {
       runInAction(() => {
@@ -60,20 +59,20 @@ class FileStore {
   }
 
 
-  async fetchFileShare(){
+  async fetchFileShare() {
     try {
       runInAction(() => {
         this.loading = true;
       });
-if(userStore.user.id == null){
-  userStore.user.id = parseInt(sessionStorage.getItem('userId') ?? '');
-  userStore.fetchUser(userStore.user.id);
-}
+      if (userStore.user.id == null) {
+        userStore.user.id = parseInt(sessionStorage.getItem('userId') ?? '');
+        userStore.fetchUser(userStore.user.id);
+      }
       const response = await axios.get(`${this.url}/filesShared/${userStore.user.email}`);
 
       runInAction(() => {
         this.fileShare = response.data;
-        this.error = null; // מאפסים שגיאות ישנות אם הקריאה הצליחה
+        this.error = null; 
       });
     } catch (error: any) {
       runInAction(() => {
@@ -85,8 +84,8 @@ if(userStore.user.id == null){
       });
     }
 
-    }
- 
+  }
+
 
   async uploadFile(file: File, name: string, password: string, type: string) {
     const formData = new FormData();
@@ -95,7 +94,7 @@ if(userStore.user.id == null){
     formData.append("password", password);
     formData.append("fileType", type);
 
-    console.log(formData);
+    console.log(formData.get("fileName"));
     if (userStore.user.id == null) {
       userStore.user.id = parseInt(sessionStorage.getItem('userId') ?? '');
     }
@@ -104,29 +103,28 @@ if(userStore.user.id == null){
         this.loading = true;
       });
 
-      console.log(userStore.user.id + "user id=" + userStore.user);
 
-      const response = await axios.post(
+     await axios.post(
         `${this.url}/upload/${userStore.user.id}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        formData
+        ,{ headers: { "Content-Type": "multipart/form-data" 
+        } }
       );
-      console.log(response.data);
+
 
       await this.fetchFiles();
-      alert("Upload successful");
+      return true;
     } catch (error: any) {
       runInAction(() => {
         this.error = error.response?.data?.message || "Error uploading file";
       });
-      alert("Upload failed");
+      return false;
     } finally {
       runInAction(() => {
         this.loading = false;
       });
     }
   }
-
 
   async deleteFile(fileId: number){
     try {

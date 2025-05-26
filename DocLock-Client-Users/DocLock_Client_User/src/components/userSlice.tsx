@@ -136,7 +136,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(deleteUser.fulfilled, (state, action: PayloadAction<number>) => {
+            .addCase(deleteUser.fulfilled, (state) => {
                 state.user = {} as User;
                 state.token = null;
                 state.loading = false;
@@ -187,7 +187,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(updatePassword.fulfilled, (state, action) => {
+            .addCase(updatePassword.fulfilled, (state) => {
                 state.loading = false;
             })
             .addCase(updatePassword.rejected, (state, action) => {

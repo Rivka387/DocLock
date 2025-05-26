@@ -27,13 +27,17 @@ const FileList = observer(() => {
   }, []);
 
   if (fileStore.error) return <div>Error: {fileStore.error}</div>;
-if(fileStore.files?.length === 0) return <Nofile/>;
-  const groupedFiles = fileStore.files?.reduce((acc, file) => {
-    const dateKey = new Date(file.createdAt).toLocaleDateString();
-    acc[dateKey] = acc[dateKey] || [];
-    acc[dateKey].push(file);
-    return acc;
-  }, {} as Record<string, UserFile[]>);
+  if (fileStore.files?.length === 0) return <Nofile />;
+  console.log("fileStore.files before reduce:", fileStore.files);
+
+  const groupedFiles = Array.isArray(fileStore.files)
+    ? fileStore.files.reduce((acc, file) => {
+      const dateKey = new Date(file.createdAt).toLocaleDateString();
+      acc[dateKey] = acc[dateKey] || [];
+      acc[dateKey].push(file);
+      return acc;
+    }, {} as Record<string, UserFile[]>)
+    : {}; // או ערך ברירת מחדל אחר שמתאים למקרה שזה לא מערך
 
   // פונקציה לשינוי מצב התפשטות של קובץ לפי תאריך
   const handleToggle = (date: string) => {
