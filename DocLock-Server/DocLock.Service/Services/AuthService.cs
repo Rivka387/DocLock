@@ -24,23 +24,14 @@ namespace DocLock.Service.Services
         // פונקציה ליצירת טוקן עם תוקף של 30 דקות
         public string GenerateJwtToken(string username, string[] roles)
         {
-            if (username == null)
-            {
-                throw new ArgumentNullException(nameof(username), "Username cannot be null");
-            }
-
-            if (roles == null)
-            {
-                throw new ArgumentNullException(nameof(roles), "Roles cannot be null");
-            }
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:KEY"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["KEY"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-             {
-                 new Claim(ClaimTypes.Name, username),
-                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // מזהה ייחודי לכל טוקן
-             };
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // מזהה ייחודי לכל טוקן
+            };
 
             // הוספת תפקידים כ-Claims
             foreach (var role in roles)
